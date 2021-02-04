@@ -1,0 +1,39 @@
+---
+---
+pre.pygments.highlight {
+  margin: 0.5em;
+  padding: 0.5em;
+
+  table.linenotable {
+    border: none;
+    margin-bottom: 0;
+  
+    pre {
+      padding: 0;
+    }
+  
+    td {
+      border: none;
+    }
+
+    .linenodiv pre {
+      color: #b9b9b9;
+      margin: 0;
+    }
+
+    .code pre {
+      margin: 0;
+    }
+  }
+}
+
+.post-meta {
+  flex-direction: column;
+  align-items: baseline;
+}
+
+.post {
+  h1, h2 {
+    margin-top: 1.5em;
+  }
+}
