@@ -34,6 +34,33 @@ pre.pygments.highlight {
 
 .post {
   h1, h2 {
-    margin-top: 1.5em;
+    margin-top: 2ex;
+  }
+}
+
+.post-source {
+  text-align: right;
+  font-size: 80%;
+}
+
+ul.post-categories {
+  margin: 1ex 0 0 0;
+}
+
+ul.post-tags {
+  // &::before {
+  //   content: "tags:";
+  // }
+
+  padding-inline-start: 0;
+  margin: 1ex 0 0 0;
+
+  li {
+    display: inline-block;
+
+    &:not(:last-child)::after {
+      content: ",";
+      margin-right: 0.2em;
+    }
   }
 }

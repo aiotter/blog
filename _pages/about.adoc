@@ -1,5 +1,7 @@
 = aiotter
 
+*Hello, I'm #Yuto Oguchi# as @aiotter*
+
 == Skills
 * Python (2018.8-)
   ** asyncio, data analysis (`numpy`, `pandas`, `matplotlib`)

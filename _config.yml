@@ -9,11 +9,18 @@ twitter_username: aiotter_tech
 github_username: aiotter
 permalink: /:slug/
 
+# make `_pages` look like a root dir
+collections:
+  pages:
+    output: true
+    permalink: /:path/
+
 # Build settings
 theme: plainwhite
 plugins:
   - jekyll-asciidoc
   - jekyll-feed
+  - jekyll-archives
 
 plainwhite:
   name: aiotter
@@ -45,3 +52,7 @@ asciidoctor:
     - pygments-style=monokai
     - icons=font
     - idseparator=_
+
+
+jekyll-archives:
+  enabled: [tags, categories]

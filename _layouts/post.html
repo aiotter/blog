@@ -8,19 +8,14 @@ layout: default
   </a>
   <div class="post-meta">
     <div class="post-date"><i class="icon-calendar"></i>{{ page.date | date: date_format }}</div>
-    <div class="post-source">
-      (<a href="{{site.repogitory_prefix}}/{{page.path | url_encode | replace: '%2F', '/' | replace: '+', '%20' }}" target="_blank" rel="noopener noreferrer">src</a>: Feel free to make a PR!)
-    </div>
+    {% include tag_list.html target=page %}
+    {% include category_list.html target=page %}
   </div>
-    {%- if page.categories.size > 0 -%}
-    <ul class="post-categories">
-      {%- for tag in page.categories -%}
-      <li>{{ tag }}</li>
-      {%- endfor -%}
-    </ul>
-    {%- endif -%}
   <div class="post">
     {{ content }}
+  </div>
+  <div class="post-source">
+    (<a href="{{site.repogitory_prefix}}/{{page.path | url_encode | replace: '%2F', '/' | replace: '+', '%20' }}" target="_blank" rel="noopener noreferrer">source</a>: Feel free to make a PR!)
   </div>
   {%- if site.plainwhite.disqus_shortname -%}
   <div id="disqus_thread" style="margin-top:25px"></div>

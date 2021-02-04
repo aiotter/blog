@@ -1,4 +1,6 @@
 = Jekyll でブログを始めました
+:page-category: Tech
+:page-tags: [Jekyll, Blog]
 
 == なぜ Hugo を使わなかったのか
 私は https://ocsj.asia[日本アジアカワウソ保全協会] の技術担当として，Hugo でウェブサイトの保守をしています．
