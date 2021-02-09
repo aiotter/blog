@@ -124,7 +124,7 @@ class Source(Base):
 
 _method_ `Source.gather_candidates(context)`::
 補完候補を作ります． +
-引数に `context` (`dict`) を取り， `candidate` (`dict`) を返します． +
+引数に `context` (`dict`) を取り， `candidates` (`dict`) のリストを返します． +
 注意点として，デフォルトでは**この関数の返り値はキャッシュされ，二度は呼ばれません**．
 ユーザーの入力によって補完候補を絞り込むような操作はすべて後述の matcher を用いて行うべきです．
 `candidate` が持つ key:::
