@@ -19,6 +19,7 @@ collections:
 theme: plainwhite
 plugins:
   - jekyll-asciidoc
+  - asciidoctor-diagram
   - jekyll-feed
   - jekyll-archives
 
@@ -43,15 +44,20 @@ plainwhite:
     - title: About
       url: "/about"
 
+keep_files:
+  - img
 asciidoc: {}
 asciidoctor:
+  base_dir: :docdir
+  safe: unsafe
   attributes:
+    - imagesdir=/img
     - source-highlighter=pygments
     - source-linenums-option
     - pygments-css=style
     - pygments-style=monokai
     - icons=font
-    - idseparator=_
+    - idseparator=-
 
 
 jekyll-archives:

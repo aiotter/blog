@@ -7,6 +7,7 @@ gem "plainwhite", "~> 0.13"
 group :jekyll_plugins do
   gem "jekyll-feed", "~> 0.12"
   gem "jekyll-asciidoc"
+  gem 'asciidoctor-diagram'
   gem "jekyll-archives"
 end
 

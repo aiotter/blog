@@ -4,6 +4,13 @@ GEM
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
     asciidoctor (2.0.12)
+    asciidoctor-diagram (2.1.0)
+      asciidoctor (>= 1.5.7, < 3.x)
+      asciidoctor-diagram-ditaamini (~> 0.13)
+      asciidoctor-diagram-plantuml (~> 1.2021)
+      rexml
+    asciidoctor-diagram-ditaamini (0.13.1)
+    asciidoctor-diagram-plantuml (1.2021.0)
     colorator (1.1.0)
     concurrent-ruby (1.1.8)
     em-websocket (0.5.2)
@@ -78,6 +85,7 @@ PLATFORMS
   x86_64-darwin-19
 
 DEPENDENCIES
+  asciidoctor-diagram
   jekyll (~> 4.2.0)
   jekyll-archives
   jekyll-asciidoc
