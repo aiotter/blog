@@ -1,6 +1,6 @@
 = aiotter
 
-*Hello, I'm #Yuto Oguchi# as @aiotter*
+*Hello, I'm #Yuto Oguchi# aka @aiotter*
 
 == Skills
 * Python (2018.8-)
