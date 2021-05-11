@@ -4,7 +4,8 @@ description: >- # this means to ignore newlines until "baseurl:"
   aiotter's blog about technology and otters.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://aiotter.com" # the base hostname & protocol for your site, e.g. http://example.com
-repogitory_prefix: https://github.com/aiotter/website/blob/master
+repository_url: https://github.com/aiotter/website
+branch: master
 twitter_username: aiotter_tech
 github_username: aiotter
 permalink: /:slug/

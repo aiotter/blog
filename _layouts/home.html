@@ -31,11 +31,13 @@ layout: default
         </a>
         <div class="post-meta">
           <div class="post-date">
-            <i class="icon-calendar"></i>
+            <i class="far fa-calendar-alt"></i>
             {{ post.date | date: date_format }}
           </div>
-          {% include category_list.html target=post %}
-          {% include tag_list.html target=post %}
+          <div class="horizontal">
+            {% include category_list.html target=post %}
+            {% include tag_list.html target=post %}
+          </div>
         </div>
         <div class="post">
           {%- if site.show_excerpts -%}

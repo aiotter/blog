@@ -28,23 +28,35 @@ pre.pygments.highlight {
 }
 
 .post-meta {
+  display: flex;
   flex-direction: column;
   align-items: baseline;
-}
+  color: #555;
 
-.post {
-  h1, h2 {
-    margin-top: 2ex;
+  .post-date, .post-source, .post-history {
+    i {
+      margin-right: 0.2em;
+    }
+    margin-right: 20px;
+  }
+
+  .post-categories {
+    margin: 1ex 0 0 0;
   }
 }
 
-.post-source {
-  text-align: right;
-  font-size: 80%;
+.horizontal {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
 }
 
-ul.post-categories {
-  margin: 1ex 0 0 0 !important;
+.post {
+  margin-top: 5ex;
+
+  h1, h2 {
+    margin-top: 2ex;
+  }
 }
 
 ul.post-tags {
@@ -63,10 +75,6 @@ ul.post-tags {
       margin-right: 0.2em;
     }
   }
-}
-
-.icon-calendar:before {
-  content: '\e800' !important;
 }
 
 @media screen and (max-width: 768px) {

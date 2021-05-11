@@ -7,15 +7,24 @@ layout: default
     <h1 class="post-title">{{ page.title | escape }}</h2>
   </a>
   <div class="post-meta">
-    <div class="post-date"><i class="icon-calendar"></i>{{ page.date | date: date_format }}</div>
-    {% include tag_list.html target=page %}
-    {% include category_list.html target=page %}
+    <div class="horizontal">
+      <div class="post-date">
+        <i class="far fa-calendar-alt"></i>{{ page.date | date: date_format }}
+      </div>
+      <div class="post-history">
+        <a href="{{site.repository_url}}/commits/{{site.branch}}/{{page.path | url_encode | replace: '%2F', '/' | replace: '+', '%20' }}" target="_blank" rel="noopener noreferrer"><i class="fas fa-history"></i>history</a>
+      </div>
+      <div class="post-source">
+        <a href="{{site.repository_url}}/blob/{{site.branch}}/{{page.path | url_encode | replace: '%2F', '/' | replace: '+', '%20' }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>source</a>
+      </div>
+    </div>
+    <div class="horizontal">
+      {% include category_list.html target=page %}
+      {% include tag_list.html target=page %}
+    </div>
   </div>
   <div class="post">
     {{ content }}
-  </div>
-  <div class="post-source">
-    (<a href="{{site.repogitory_prefix}}/{{page.path | url_encode | replace: '%2F', '/' | replace: '+', '%20' }}" target="_blank" rel="noopener noreferrer">source</a>: Feel free to make a PR!)
   </div>
   {%- if site.plainwhite.disqus_shortname -%}
   <div id="disqus_thread" style="margin-top:25px"></div>
