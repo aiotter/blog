@@ -35,7 +35,7 @@ plainwhite:
     # linkedIn: in/samarsault # format: locale/username
 
   portfolio_image: "img/icon.png"
-  disqus_shortname: aiotter
+  # disqus_shortname: aiotter
   sitemap: true
   html_lang: "ja"
 
