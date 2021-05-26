@@ -3,14 +3,17 @@ layout: default
 ---
 {%- assign date_format = site.plainwhite.date_format | default: "%b %-d, %Y" -%}
 <script>
-async function getCommentUrl() {
-  const api_url = 'https://api.github.com/repos/{{site.repository}}/commits?path={{ page.path | url_encode | replace: '%2F', '/' | replace: '+', '%20' }}'
+async function getCommentUrl(repo, filePath) {
+  // list up the commits which update the current post
+  const api_url = `https://api.github.com/repos/${repo}/commits?path=${filePath}`
   const response = await fetch(api_url)
   const commits = await response.json()
-  for (commit of commits) {
+
+  // pick up the latest commit with only 1 updating file
+  for (const commit of commits) {
     const response = await fetch(commit.url);
-    const data = await response.json();
-    if (data.files.length == 1) return `${commit.html_url}#new_commit_comment_field`;
+    const commit_detail = await response.json();
+    if (commit_detail.files.length == 1) return `${commit.html_url}#new_commit_comment_field`;
   }
   throw new Error('Cannot detect comment url');
 }
@@ -32,7 +35,7 @@ async function getCommentUrl() {
         <a href="https://github.com/{{site.repository}}/blob/{{site.branch}}/{{ page.path | url_encode | replace: '%2F', '/' | replace: '+', '%20' }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>source</a>
       </div>
       <div class="post-add-comment">
-        <a onclick="getCommentUrl().then(url => {window.open(url, '_blank')}).catch(() => {alert('コメント先を自動選択できませんでした．編集履歴を確認し，手動でコメント先を選択してください．'); window.open('https://github.com/{{site.repository}}/commits/{{site.branch}}/{{ page.path | url_encode | replace: '%2F', '/' | replace: '+', '%20' }}');})"><i class="far fa-comment-dots"></i>add comment</a>
+        <a onclick="getCommentUrl('{{site.repository}}', '{{page.path}}').then(url => {window.open(url, '_blank')}).catch(() => {alert('コメント先を自動選択できませんでした．編集履歴を確認し，手動でコメント先を選択してください．'); window.open('https://github.com/{{site.repository}}/commits/{{site.branch}}/{{ page.path | url_encode | replace: '%2F', '/' | replace: '+', '%20' }}');})"><i class="far fa-comment-dots"></i>add comment</a>
       </div>
       <div class="post-create-pr">
         <a href="https://github.com/{{site.repository}}/edit/{{site.branch}}/{{ page.path | url_encode | replace: '%2F', '/' | replace: '+', '%20' }}" target="_blank" rel="noopener noreferrer"><i class="fas fa-code-branch"></i>make a suggestion</a>
