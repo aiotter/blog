@@ -3,20 +3,94 @@ layout: default
 ---
 {%- assign date_format = site.plainwhite.date_format | default: "%b %-d, %Y" -%}
 <script>
-async function getCommentUrl(repo, filePath) {
-  // list up the commits which update the current post
-  const api_url = `https://api.github.com/repos/${repo}/commits?path=${filePath}`
-  const response = await fetch(api_url)
-  const commits = await response.json()
+  function addComment(comment) {
+    const avatarImg = document.createElement('img');
+    avatarImg.alt = comment.user.login;
+    avatarImg.src = comment.user.avatar_url;
+    avatarImg.height = avatarImg.width = 44;
 
-  // pick up the latest commit with only 1 updating file
-  for (const commit of commits) {
-    const response = await fetch(commit.url);
-    const commit_detail = await response.json();
-    if (commit_detail.files.length == 1) return `${commit.html_url}#new_commit_comment_field`;
+    const avatar = document.createElement('a');
+    avatar.classList.add('avatar');
+    avatar.href = comment.user.html_url;
+    avatar.target = '_blank';
+    avatar.appendChild(avatarImg);
+
+    const commentMeta = document.createElement('span');
+    commentMeta.classList.add('comment-meta');
+    commentedDate = new Date(comment.created_at)
+    commentMeta.innerHTML = `<a href="${comment.user.html_url}" target="_blank"><strong>${comment.user.login}</strong></a> commented <a href="${comment.html_url}" target="_blank">on ${commentedDate.toDateString()}</a>`
+    if (comment.created_at !== comment.updated_at) {
+      commentMeta.innerHTML += ' <sub>(edited)</sub>'
+    }
+
+    const commentActions = document.createElement('div');
+    commentActions.classList.add('comment-actions');
+    if (comment.author_association) {
+      commentActions.innerHTML += `<span class="author-association-badge">${comment.author_association}</span>`;
+    }
+
+    const commentHeader = document.createElement('header');
+    commentHeader.classList.add('comment-header');
+    commentHeader.appendChild(commentMeta);
+    commentHeader.appendChild(commentActions);
+
+    const commentBodyWrapper = document.createElement('div');
+    commentBodyWrapper.classList.add('markdown-body', 'markdown-body-scrollable');
+    commentBodyWrapper.innerHTML = comment.body_html;
+
+    const commentContainer = document.createElement('div');
+    commentContainer.classList.add('comment');
+    commentContainer.appendChild(commentHeader);
+    commentContainer.appendChild(commentBodyWrapper);
+
+    const commentArticle = document.createElement('article');
+    commentArticle.classList.add('timeline-comment');
+    commentArticle.appendChild(avatar);
+    commentArticle.appendChild(commentContainer);
+
+    const container = document.querySelector('#github_comments');
+    container.appendChild(commentArticle);
   }
-  throw new Error('Cannot detect comment url');
-}
+
+  async function addComments(repo, filePath) {
+    const fetchCommentsApiUrl = `https://api.github.com/repos/${repo}/comments?per_page=100`
+    const headers = {'Accept': 'application/vnd.github-commitcomment.html+json'}
+    const comments = await (await fetch(fetchCommentsApiUrl, {headers: headers})).json()
+
+    const fetchCorrespondingCommitsApiUrl = `https://api.github.com/repos/${repo}/commits?path=${filePath}&per_page=100`
+    const commits = await (await fetch(fetchCorrespondingCommitsApiUrl)).json();
+
+    const commitShas = commits.map(({ sha }) => sha);
+    const correspondingComments = comments.filter(comment => commitShas.includes(comment.commit_id));
+
+    correspondingComments.forEach(comment => addComment(comment));
+  }
+
+  addComments('{{site.repository}}', '{{page.path}}');
+
+  async function getCommentUrl(repo, filePath) {
+    // list up commits which update the current post
+    const apiUrl = `https://api.github.com/repos/${repo}/commits?path=${filePath}`
+    const response = await fetch(apiUrl)
+    const commits = await response.json()
+  
+    // pick up the latest commit with only 1 updating file
+    for (const commit of commits) {
+      const response = await fetch(commit.url);
+      const commit_detail = await response.json();
+      if (commit_detail.files.length == 1) return `${commit.html_url}#new_commit_comment_field`;
+    }
+    throw new Error('Cannot detect comment url');
+  }
+  
+  function jumpToCommentUrl() {
+    getCommentUrl('{{site.repository}}', '{{page.path}}')
+      .then(url => {window.open(url, '_blank')})
+      .catch(() => {
+        alert('コメント先を自動選択できませんでした．編集履歴を確認し，手動でコメント先を選択してください．');
+        window.open('https://github.com/{{site.repository}}/commits/{{site.branch}}/{{ page.path | url_encode | replace: '%2F', '/' | replace: '+', '%20' }}');
+      });
+  }
 </script>
 
 <div class="post-container">
@@ -34,8 +108,8 @@ async function getCommentUrl(repo, filePath) {
       <div class="post-source">
         <a href="https://github.com/{{site.repository}}/blob/{{site.branch}}/{{ page.path | url_encode | replace: '%2F', '/' | replace: '+', '%20' }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>source</a>
       </div>
-      <div class="post-add-comment">
-        <a onclick="getCommentUrl('{{site.repository}}', '{{page.path}}').then(url => {window.open(url, '_blank')}).catch(() => {alert('コメント先を自動選択できませんでした．編集履歴を確認し，手動でコメント先を選択してください．'); window.open('https://github.com/{{site.repository}}/commits/{{site.branch}}/{{ page.path | url_encode | replace: '%2F', '/' | replace: '+', '%20' }}');})"><i class="far fa-comment-dots"></i>add comment</a>
+      <div class="post-comments">
+        <a href="#github_comments"><i class="far fa-comment-dots"></i>comments</a>
       </div>
       <div class="post-create-pr">
         <a href="https://github.com/{{site.repository}}/edit/{{site.branch}}/{{ page.path | url_encode | replace: '%2F', '/' | replace: '+', '%20' }}" target="_blank" rel="noopener noreferrer"><i class="fas fa-code-branch"></i>make a suggestion</a>
@@ -49,6 +123,24 @@ async function getCommentUrl(repo, filePath) {
   <div class="post">
     {{ content }}
   </div>
+  <hr>
+  <p>コメント</p>
+  <div id="github_comments" class="post"></div>
+  <div id="add_comments" class="post">
+    <article class="timeline-comment">
+      <a class="avatar" onclick="jumpToCommentUrl()" target="_blank" tabindex="-1">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="margin: 10;"><path fill-rule="evenodd" d="M17.263 2.177a1.75 1.75 0 012.474 0l2.586 2.586a1.75 1.75 0 010 2.474L19.53 10.03l-.012.013L8.69 20.378a1.75 1.75 0 01-.699.409l-5.523 1.68a.75.75 0 01-.935-.935l1.673-5.5a1.75 1.75 0 01.466-.756L14.476 4.963l2.787-2.786zm-2.275 4.371l-10.28 9.813a.25.25 0 00-.067.108l-1.264 4.154 4.177-1.271a.25.25 0 00.1-.059l10.273-9.806-2.94-2.939zM19 8.44l2.263-2.262a.25.25 0 000-.354l-2.586-2.586a.25.25 0 00-.354 0L16.061 5.5 19 8.44z"></path></svg>
+      </a>
+      <div class="comment">
+        <header class="comment-header">
+          <span class="comment-meta"><strong>You</strong> will comment now</span>
+        </header>
+        <div class="markdown-body markdown-body-scrollable">
+          <p style="text-align: center;"><a onclick="jumpToCommentUrl()">ADD YOUR COMMENT</a></p>
+        </div>
+      </div></article>
+  </div>
+
   {%- if site.plainwhite.disqus_shortname -%}
   <div id="disqus_thread" style="margin-top:25px"></div>
   <script>
