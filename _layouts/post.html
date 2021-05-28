@@ -82,13 +82,14 @@ layout: default
     }
     throw new Error('Cannot detect comment url');
   }
-  
+
   function jumpToCommentUrl() {
+    const popup = window.open('', 'githubCommentWindow');
     getCommentUrl('{{site.repository}}', '{{page.path}}')
-      .then(url => {window.open(url, '_blank')})
+      .then(url => { popup.location = url; })
       .catch(() => {
-        alert('コメント先を自動選択できませんでした．編集履歴を確認し，手動でコメント先を選択してください．');
-        window.open('https://github.com/{{site.repository}}/commits/{{site.branch}}/{{ page.path | url_encode | replace: '%2F', '/' | replace: '+', '%20' }}');
+        popup.alert('コメント先を自動選択できませんでした．編集履歴を確認し，手動でコメント先を選択してください．');
+        popup.location = 'https://github.com/{{site.repository}}/commits/{{site.branch}}/{{ page.path | url_encode | replace: '%2F', '/' | replace: '+', '%20' }}';
       });
   }
 </script>
