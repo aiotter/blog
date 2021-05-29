@@ -1,0 +1,115 @@
+{%- capture image_url -%}
+{{ site.url }}{{ site.logo }}
+{%- endcapture -%}
+<link rel="shortcut icon" href="{{ site.logo }}">
+<meta name="generator" content="Jekyll {{ jekyll.version }}" />
+<meta property="og:title" content="{{ page.title }}" />
+<meta property="og:locale" content="{{ site.locale }}" />
+<meta name="description" content="{{ page.description }}" />
+<meta property="og:description" content="{{ page.description }}" />
+<link rel="canonical" href="{{ site.url }}{{ page.url }}" />
+<meta property="og:url" content="{{ site.url }}{{ page.url }}" />
+<meta property="og:site_name" content="{{ site.title }}" />
+<meta property="og:image" content="{{ image_url }}" />
+{% if page.path contains '_posts' %}
+<meta property="og:type" content="article" />
+{% else %}
+<meta property="og:type" content="website" />
+{% endif %}
+<meta property="article:published_time" content="{{ page.date | jsonify }}" />
+<meta name="twitter:card" content="{{ site.twitter.card }}" />
+<meta property="twitter:image" content="{{ image_url }}" />
+<meta property="twitter:title" content="{{ page.title }}" />
+<meta name="twitter:site" content="{{ site.twitter.username }}" />
+<meta property="fb:app_id" content="{{ site.facebook.app_id }}" />
+
+<script type="application/ld+json">
+[{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "url": "{{ site.url }}{{ page.url }}",
+  "name": {{ page.title | jsonify }},
+  "headline": {{ page.title | jsonify }},
+  "keywords": {{ page.tags | join: ',' | jsonify }},
+  "description": {{ page.excerpt | strip_newlines | strip | jsonify }},
+  "articleBody": {{ page.content | strip_html | jsonify }},
+  "datePublished": {{ page.date | jsonify }},
+  "dateModified": {{ page.last_modified_at | default: page.date | jsonify }},
+  "author": {
+    "@type": "Person",
+    "name": {{ site.author.name | jsonify }}
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": {{ site.title | jsonify }},
+    "url": "{{ site.url }}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ site.url }}{{ site.logo }}"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ site.url }}{{ page.url }}"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "{{ image_url }}"
+  }
+  {%- unless page.path contains '_posts' -%}
+  ,"breadcrumbListFromHome": {
+    "@type": "BreadcrumbList",
+    "name": "Breadcrumb list from Home",
+    "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ site.url }}"
+    }]
+  }
+  {%- else -%}
+  {%- for category in page.categories -%}
+  ,"breadcrumbListFromCategory{{ category }}": {
+    "@type": "BreadcrumbList",
+    "name": "Breadcrumb List from category: {{ category }}",
+    "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ site.url }}"
+    }, {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "category: {{ category }}",
+      "item": "{{ site.url }}/{{ category | downcase }}"
+    }]
+  }
+  {%- endfor -%}
+  {%- for tag in page.tags -%}
+  ,"breadcrumbListFromTag{{ tag }}": {
+    "@type": "BreadcrumbList",
+    "name": "Breadcrumb List from tag: {{ tag }}",
+    "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ site.url }}"
+    }, {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "category: {{ tag }}",
+      "item": "{{ site.url }}/{{ tag | downcase }}"
+    }]
+  }
+  {%- endfor -%}
+  {%- endunless -%}
+}
+{%- if page.seo -%}
+,{
+  "@context": "https://schema.org",
+  {%- assign lastIndex = page.seo | jsonify | size | minus: 2 -%}
+  {{ page.seo | jsonify | slice: 1, lastIndex | replace: '"type"', '"@type"' }}
+}
+{%- endif -%}
+]
+</script>

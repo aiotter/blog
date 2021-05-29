@@ -8,7 +8,7 @@ repository: aiotter/website
 branch: master
 twitter_username: aiotter_tech
 github_username: aiotter
-permalink: /:slug/
+permalink: /:slugified_categories/:slug/
 
 # make `_pages` look like a root dir
 collections:
@@ -23,6 +23,18 @@ plugins:
   - asciidoctor-diagram
   - jekyll-feed
   - jekyll-archives
+  - jekyll-last-modified-at
+
+# SEO settings
+locale: ja_JP
+twitter:
+  username: aiotter_tech
+  card: summary
+facebook:
+  app_id: 3027974760771960
+author:
+  name: aiotter
+logo: "/img/icon.png"
 
 plainwhite:
   name: aiotter
