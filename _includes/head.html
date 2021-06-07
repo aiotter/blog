@@ -10,8 +10,11 @@
 {% endif %}
 
 <link rel="stylesheet" href="/css/custom.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">  
-<link rel="stylesheet" href="/css/admonition.css">
 <link rel="stylesheet" href="/css/adoc-golo.css">
-<link rel="stylesheet" href="/css/timeline-comment.css">
+{%- if page.path contains '_posts' -%}
+  <link rel="stylesheet" href="/css/admonition.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/timeline-comment.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/modal.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="/css/donation.css" media="print" onload="this.media='all'">
+{%- endif -%}

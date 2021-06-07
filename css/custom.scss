@@ -54,6 +54,10 @@ pre.pygments.highlight {
   align-items: flex-end;
 }
 
+.center {
+  text-align: center;
+}
+
 .post {
   margin-top: 5ex;
 
@@ -103,4 +107,26 @@ ul.post-tags {
       padding: 1ex 0;
     }
   }
+}
+
+button {
+  font-size: .875rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  background-color: #e6e6e6;
+  color: rgba(0,0,0,.8);
+  border-radius: .25rem;
+  border-style: none;
+  border-width: 0;
+  cursor: pointer;
+  -webkit-appearance: button;
+  text-transform: none;
+  overflow: visible;
+  line-height: 1.15;
+  margin: 0;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
