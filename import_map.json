@@ -1,0 +1,15 @@
+{
+  "imports": {
+    "site": "./_config.ts",
+    "plugins/": "./_plugins/",
+    "components/": "./_components/",
+    "meta": "./_meta/mod.ts",
+    "lume": "https://deno.land/x/lume@v1.5.1/mod.ts",
+    "lume/": "https://deno.land/x/lume@v1.5.1/",
+    "nano": "https://deno.land/x/nano_jsx@v0.0.29/mod.ts",
+    "nano/": "https://deno.land/x/nano_jsx@v0.0.29/",
+    "nano/jsx-runtime": "https://deno.land/x/nano_jsx@v0.0.29/jsx-runtime/index.ts",
+    "std/": "https://deno.land/std@0.120.0/",
+    "dayjs": "https://esm.sh/dayjs@1.10.7"
+  }
+}
