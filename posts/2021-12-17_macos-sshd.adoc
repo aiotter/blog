@@ -1,0 +1,31 @@
+= macOS での sshd の設定方法
+:page-category: Tech
+:page-tags: [macOS]
+
+macOS での sshd の設定方法についてググったところ、情報が古いのか間違った情報がヒットしたので、2021 年 12 月現在の最新の情報を備忘録として残しておきます。
+
+
+== 環境
+macOS Monterey 12.1 (Intel)
+
+
+== 設定ファイルの場所
+macOS の sshd の設定ファイルは `+/etc/ssh/sshd_config+` に存在します。
+`+/etc/ssh_config+` ではありません。
+
+このことは `+man 8 sshd+` に、より詳しくは `+man 5 sshd_config+` に書かれています。
+
+安全のために、私はこのように設定を変更しました。
+
+[source, sshdconfig]
+----
+PermitRootLogin no
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+----
+
+あとは `+sudo launchctl kickstart -k system/com.openssh.sshd+` で sshd を再起動して設定を反映します。
+
+== sshd のログの取り方
+macOS のログは `+log+` コマンドで閲覧できます。
+sshd のログをリアルタイムで取りたければ `+log stream --level debug | grep --line-buffered sshd+` です。

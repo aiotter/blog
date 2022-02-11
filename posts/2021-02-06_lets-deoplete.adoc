@@ -1,0 +1,183 @@
+= Deoplete プラグインの作り方講座
+:page-category: Tech
+:page-tags: [Vim]
+
+
+皆さんの愛用のテキストエディタはなんですか？
+いや，これは聞くまでもないことですね． +
+最も多くの PC にデフォルトでインストールされていて，圧倒的な編集効率と拡張性を兼ね揃える最強のテキストエディタ……
+
+そう， #vim# を使っている人がほとんどのはずです．
+
+私は普段は neovim を使っているのですが，vim8 よりもさらに高速で気に入っています．
+たまによく分からない仕様を踏み抜いて時間を溶かすことはありますが……
+footnote:[例えば，補完表示中に C-n で補完を無視してカーソルをひとつ下の行に移動させたかったんですが，C-n を補完にフォーカスする以外の操作に割り当てることができませんでした．これは neovim と vim8 で共通する仕様です．]
+footnote:[Vim script がとても嫌いなので Spacemacs への移行も検討しているのですが，どうも色々よく分からなくて二の足を踏んでいます．]
+
+== さあ，"""補完""" を始めようか――
+さて，Vim で git を扱う際に，GitHub の Issue のプレビューを見ながら Issue 番号の補完とかをしたいなという思いが最近ますます強くなってきました．
+そこで https://github.com/rhysd/github-complete.vim[これ] とか https://github.com/tpope/vim-rhubarb[これ] とか試したんですが，
+私は補完に deoplete を使っているので自動で補完が始まって欲しいところ，補完リスト表示で HTTP リクエストを挟む都合上どうも自動補完と相性が悪くて，
+補完が全然うまくでなかったり補完表示までが遅かったりしてイライラしていました．
+
+[NOTE]
+これらの補完プラグインはオムニ補完として実装されていて，自動的にではなくキーバインド (C-x C-o) で呼び出されることを想定しています．
+
+そこで自分で deoplete プラグインを作りました．
+まともなチュートリアルが存在しないので，ドキュメントとソースコードを知識ゼロ状態からひたすら読み解く困難を味わうことになりました．
+そこで，今日はちょっとでもまともな deoplete プラグインの作り方講座を公開しようと思います．
+
+あ，作成したプラグインの説明は後日別に公開します．
+
+== Deoplete プラグインの基本的な構成
+[plantuml, format=svg, svg-type=inline]
+----
+skinparam Legend {
+	BackgroundColor transparent
+	BorderColor transparent
+}
+legend
+.
+|_ rplugin
+  |_ python3
+    |_ deoplete
+      |_ filters
+        |_ my_converter.py
+        |_ my_matcher.py
+        |_ my_sorter.py
+      |_ sources
+        |_my_source.py
+end legend
+----
+
+=== source
+sources ディレクトリにあるスクリプトが補完情報の提供元 (`source`) です．
+このスクリプトで定義された `Source` という名前のクラスが補完の根幹を担います．
+footnote:[ここでロードされるクラスの名前は `Source` だけで，他のクラスは指定できません: https://github.com/Shougo/deoplete.nvim/blob/c4fe2529719e701d5d30994cab9650d82019f495/rplugin/python3/deoplete/child.py#L112[ソース]]
+footnote:[`+$VIMRUNTIME/*/rplugin/python3/deoplete/$source[s]/+` にあるスクリプトが自動的に選ばれます．]
+
+=== filter
+filters ディレクトリには，以下の３つの機能を持つスクリプトを配置します:
+
+[horizontal]
+converter:: 補完候補を改変する
+matcher::   補完候補をカーソル位置や入力文字によって絞り込む
+sorter::    補完候補を並び替える
+
+これらの 3 つはすべて filter の仲間であり，役割が違うだけで，共通のインターフェイスを持っています．
+
+== 各モジュールの構成
+=== source
+ここでは試しにメールアドレスのドメインを補完するソースを作成してみます．
+
+[source, python]
+.my_source.py
+----
+from deoplete.source.base import Base
+
+class Source(Base):
+    def __init__(self, vim):
+        super().__init__(vim)
+
+        self.name = 'mail_address'  # <1>
+        self.mark = '[Mail]'  # <2>
+        self.rank = 500  # <3>
+        self.input_pattern = r'@.*'  # <4>
+        # self.filetypes = ['markdown']  # <5>
+        # self.converters = ['my_converter']  # <6>
+        self.matchers = ['my_matcher.py']  # <7>
+        # self.sorters = ['my_sorter.py']  # <8>
+
+    def get_complete_position(self, context):
+        pos = context['input'].rfind('@')
+        return pos if pos < 0 else pos + 1
+
+    def gather_candidates(self, context):
+        return [{
+            'word': 'google.com',
+            'abbr': 'google.com - Google',
+            'kind': 'Free',
+            'info': 'Free mail provided by Google',
+        }, {
+            'word': 'yahoo.co.jp',
+            'abbr': 'yahoo.co.jp - Yahoo',
+            'kind': 'Free',
+            'info': 'Free mail provided by Yahoo',
+        }, {
+            'word': 'st.kyoto-u.ac.jp',
+            'abbr': 'st.kyoto-u.ac.jp - Kyoto University',
+            'kind': 'Academic',
+            'info': 'Student mail account provided by Kyoto University',
+        }]
+----
+<1> ソース名です．必須です．
+<2> 補完時にソース名をどのように表示するか指定します．
+<3> ソースの優先度です．他のソースを見る限り，500 くらいがちょうど良さそう．
+<4> デフォルトでは最低2文字マッチしないと補完が始まらないところを，この正規表現にマッチしたら即座に補完を開始するようにします．
+<5> ここにファイルタイプを指定すると，そのファイルタイプでのみ補完するようになります．
+<6> converter を指定します．
+<7> matcher を指定します．
+<8> sorter を指定します．
+
+
+.Source が持つメソッド (一部抜粋)
+
+_method_ `Source.gather_candidates(context)`::
+補完候補を作ります． +
+引数に `context` (`dict`) を取り， `candidates` (`dict`) のリストを返します． +
+注意点として，デフォルトでは**この関数の返り値はキャッシュされ，二度は呼ばれません**．
+ユーザーの入力によって補完候補を絞り込むような操作はすべて後述の matcher を用いて行うべきです．
+`candidate` が持つ key:::
+  * 補完候補 `word` (*必須*)
+  * 補完時の選択肢としての表示名 `abbr`
+  * 補完候補の種別 `kind`
+  * 補完候補に付けるマーク `mark`
+  * 補完の説明書き `info`
+`context` の持つ key （一部のみ抜粋）:::
+  * 補完中の現在の行内容 `input`
+  * 補完候補のリスト `candidates`
+
+_method_ `Source.get_complete_position(context)`::
+補完の開始位置を判断します． +
+今回， `+@+` が入力されると補完が開始されるようになっていますが，補完語句には `+@+` が含まれていないため，
+補完候補となる語句の最初の文字と実際の補完開始位置 (= `+@+` の入力された位置) が異なります． +
+このような場合はこのメソッドで補完の開始位置を deoplete に伝える必要があります． +
+（開始位置が一致している場合は不要です）
+
+
+=== filter
+filter は converter, matcher, sorter の総称で， source が出力した補完候補群 candidates に手を加えたり (converter)，一部のみ抽出したり (matcher)，順序を変えたり (sorter) します．
+
+ここでは，ドメインを常にアルファベット順に表示させる sorter の実装を例として説明します．
+
+[source, python]
+.my_sorter.py
+----
+from pynvim import Nvim
+from deoplete.base.filter import Base
+
+class Filter(Base):
+    def __init__(self, vim: Nvim):
+        super().__init__(vim)
+
+        self.name = 'my_sorter'
+        self.description = 'sorts by host name'
+
+    def filter(self, context):
+        return sorted(context['candidates'], key=lambda candidate: candidate['word'])
+----
+
+.Filter が持つメソッド
+_method_ `Filter.filter`::
+`context` を引数に取り， `candidate` のリストを返します． +
+`context['candidates']` で現在の変換候補の一覧を得られるので，それを操作するのが基本的な使い方になります．
+
+
+== まとめ
+deoplete の source の実装については，公式の https://github.com/Shougo/deoplete.nvim/blob/c4fe2529719e701d5d30994cab9650d82019f495/rplugin/python3/deoplete/source/file.py[file] の実装が参考になります．
+ファイルパスが入力されると補完するものですね．
+
+filter の実装については https://github.com/Shougo/deoplete.nvim/blob/c4fe2529719e701d5d30994cab9650d82019f495/rplugin/python3/deoplete/filter/matcher_length.py[matcher_length] が参考になると思います．
+
+deoplete のプラグイン作成は実際やってみると結構簡単でした．
+今後もなにか機会があれば実装してみようと思います．
