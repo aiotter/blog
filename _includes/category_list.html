@@ -1,7 +1,0 @@
-{%- if include.target.categories.size > 0-%}
-<ul class="post-categories">
-  {%- for category in include.target.categories -%}
-  <a href="/category/{{ category | slugify }}"><li>{{ category }}</li></a>
-  {%- endfor -%}
-</ul>
-{%- endif -%}
