@@ -3,8 +3,7 @@
 
 import * as Nano from "nano";
 import site from "site";
-import { Data, url } from "meta";
-import { Page } from "lume/core.ts";
+import { Data, sort, url } from "meta";
 import { BreadcrumbList } from "components/breadcrumb-list.tsx";
 
 export const layout = "layouts/base.tsx";
@@ -27,15 +26,18 @@ export default function* (): Generator<Data> {
       content: () => (
         <>
           <h1>{title}</h1>
+          <BreadcrumbList
+            items={[{
+              name: "tags",
+              url: site.url(new URL("./tags.tsx", import.meta.url).href),
+            }, { name: title, url: url.tag(tag) }]}
+          />
+          <p class="my-8 font-bold">Tag ページにレンダリングの問題があることを確認しています。現在修正中です。</p>
           <ol>
-            <BreadcrumbList
-              items={[{
-                name: "tags",
-                url: site.url(new URL("./tags.tsx", import.meta.url).href),
-              }, { name: title, url: url.tag(tag) }]}
-            />
-            {() =>
-              site.pages.filter((page) => page.data.tags?.includes(tag)).map(
+            {site.pages
+              .filter((page) => page.data.tags?.includes(tag))
+              .sort(sort.pages.dateDescending)
+              .map(
                 (page) => (
                   <li>
                     <a href={site.url(page.data.url as string)}>
@@ -44,7 +46,6 @@ export default function* (): Generator<Data> {
                   </li>
                 ),
               )}
-            <li></li>
           </ol>
         </>
       ),

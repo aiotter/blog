@@ -3,11 +3,15 @@
 import site from "site";
 import { Data } from "meta";
 import { Created, Modified, Tag } from "components/badge.tsx";
+import { sort } from "meta";
 
 export const layout = "layouts/base.tsx";
 
 const BlogPosts = () => {
-  const blogPosts = site.pages.filter((page) => page.data.type === "post");
+  const blogPosts = site.pages
+    .filter((page) => page.data.type === "post")
+    .sort(sort.pages.dateDescending);
+
   return (
     <ul class="max-w-xl space-y-10">
       {blogPosts.map((page) => (
