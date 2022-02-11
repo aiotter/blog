@@ -19,6 +19,7 @@ ${BIN}/sass:
 	cd "${TMP}"
 	tar -zxvf <(curl -sL 'https://github.com/sass/dart-sass/releases/download/${SASS_VERSION}/dart-sass-${SASS_VERSION}-linux-x64.tar.gz')
 	mv dart-sass/* "${BIN}"
+	chmod +x "${BIN}/sass"
 ${BIN}/deno:
 	[[ -d "${TMP}" ]] || mkdir "${TMP}"
 	[[ -d "${BIN}" ]] || mkdir "${BIN}"
@@ -26,6 +27,7 @@ ${BIN}/deno:
 	cd "${TMP}"
 	jar -xvf <(curl -sL 'https://github.com/denoland/deno/releases/download/${DENO_VERSION}/deno-x86_64-unknown-linux-gnu.zip')
 	mv deno "${BIN}"
+	chmod +x "${BIN}/deno"
 endif
 
 ifeq ($(shell uname),Darwin)
@@ -36,6 +38,7 @@ ${BIN}/sass:
 	rm -rf "${BIN}"/*
 	tar -xvf <(curl -sL 'https://github.com/sass/dart-sass/releases/download/${SASS_VERSION}/dart-sass-${SASS_VERSION}-macos-x64.tar.gz')
 	mv dart-sass/* "${BIN}"
+	chmod +x "${BIN}/sass"
 ${BIN}/deno:
 	[[ -d "${TMP}" ]] || mkdir "${TMP}"
 	[[ -d "${BIN}" ]] || mkdir "${BIN}"
@@ -43,9 +46,5 @@ ${BIN}/deno:
 	cd "${TMP}"
 	jar -xvf <(curl -sL 'https://github.com/denoland/deno/releases/download/${DENO_VERSION}/deno-x86_64-apple-darwin.zip')
 	mv deno "${BIN}"
+	chmod +x "${BIN}/deno"
 endif
-
-cd: ${BIN}/sass
-	export PATH=${BIN}:${PATH}
-	curl -fsSL https://deno.land/x/install/install.sh | sh -s ${DENO_VERSION}
-	deno run -A https://deno.land/x/lume@${LUME_VERSION}/ci.ts -- --import-map='import_map.json'
