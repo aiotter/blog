@@ -56,9 +56,6 @@ site.use(nanoJsx({ importMap: new URL("import_map.json", import.meta.url) }));
 import dateFromGit from "plugins/date-from-git.ts";
 site.use(dateFromGit());
 
-import cloudFlarePages from "plugins/cloudflare-pages.ts";
-site.use(cloudFlarePages());
-
 import asciidoc from "plugins/asciidoctor-js.ts";
 site.use(asciidoc());
 

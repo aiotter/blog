@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - lume
+  pull_request:
+    branches:
+      - lume
 
 jobs:
   deploy:
@@ -28,16 +31,8 @@ jobs:
       - name: Build site
         run: make build
 
-      - name: Deploy to Cloudflare Pages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_DEPLOY_BRANCH: _site
-        run: |
-          cd _site
-          git init
-          git config user.name "${GITHUB_ACTOR}-ci"
-          git config user.email "${GITHUB_ACTOR}-ci@github.io"
-          git remote add origin "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          git add .
-          git commit -m "Latest build"
-          git push -f origin "HEAD:${GITHUB_DEPLOY_BRANCH}"
+      - name: Upload to Deno Deploy
+        uses: denoland/deployctl@v1
+        with:
+          project: aiotter-blog
+          entrypoint: _server/main.ts
