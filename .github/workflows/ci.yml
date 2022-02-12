@@ -1,0 +1,43 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - lume
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        env:
+          cache-name: deno-sass
+        with:
+          path: _bin
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Makefile') }}
+
+      - name: Build site
+        run: make build
+
+      - name: Deploy to Cloudflare Pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_DEPLOY_BRANCH: _site
+        run: |
+          cd _site
+          git init
+          git config user.name "${GITHUB_ACTOR}-ci"
+          git config user.email "${GITHUB_ACTOR}-ci@github.io"
+          git remote add origin "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git add .
+          git commit -m "Latest build"
+          git push -f origin "HEAD:${GITHUB_DEPLOY_BRANCH}"
