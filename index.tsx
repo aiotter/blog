@@ -31,13 +31,11 @@ const BlogPosts = () => {
           >
             <div name="spacer" class="flex-grow" />
 
-            {page.data.lastModified && (
-              <Modified>{page.data.lastModified as Date}</Modified>
-            )}
-
             {page.data.tags!.map((tag) => <Tag>{tag}</Tag>)}
 
-            <Created>{page.data.date!}</Created>
+            {page.data.lastModified &&
+                <Modified>{page.data.lastModified as Date}</Modified> ||
+              <Created>{page.data.date!}</Created>}
           </div>
         </li>
       ))}

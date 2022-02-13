@@ -65,7 +65,7 @@ export const Created: FC<{ children: Parameters<typeof dayjs>[0] }> = (
 export const Modified: FC<{ children: Parameters<typeof dayjs>[0] }> = (
   { children: date },
 ) => (
-  <Badge label="修正" color="brightgreen" height="20">
+  <Badge label="更新" color="brightgreen" height="20">
     {dayjs(date).format("YYYY-MM-DD")}
   </Badge>
 );
