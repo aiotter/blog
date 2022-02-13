@@ -1,8 +1,10 @@
 import lume from "lume/mod.ts";
+import * as fs from "https://deno.land/std@0.120.0/node/fs.ts";
+import * as git from "https://esm.sh/isomorphic-git@1.10.3";
 
 export const repository = {
   url: "https://github.com/aiotter/blog",
-  branch: "master",
+  branch: await git.currentBranch({fs, dir: Deno.cwd()}) as string,
 };
 
 import footnote from "https://jspm.dev/markdown-it-footnote@3.0.3";
