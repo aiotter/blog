@@ -47,6 +47,21 @@ async function getLastModified(site: Site, page: Page) {
   }
 }
 
+async function getDate(site: Site, page: Page) {
+  try {
+    const dir = site.src();
+    const filepath = (page.src.path.startsWith("/")
+      ? page.src.path.slice(1)
+      : page.src.path) + (page.src.ext ?? "");
+
+    const commits = await git.log({ fs, dir, filepath, follow: true });
+    return commits[-1];
+  } catch (error) {
+    if (error instanceof git.Errors.NotFoundError) return undefined;
+    throw error;
+  }
+}
+
 async function setLastModified(site: Site, page: Page) {
   const log = await getLastModified(site, page);
 
@@ -56,8 +71,14 @@ async function setLastModified(site: Site, page: Page) {
   }
 }
 
+async function setDate(site: Site, page: Page) {
+  const log = await getDate(site, page);
+  if (log) page.data.date = new Date(log.commit.author.timestamp * 1000);
+}
+
 export default function () {
   return (site: Site) => {
     site.preprocess([".html"], setLastModified.bind(null, site));
+    site.preprocess([".html"], setDate.bind(null, site));
   };
 }
