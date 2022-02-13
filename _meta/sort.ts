@@ -1,15 +1,15 @@
 import { Page } from "lume/core.ts";
+import { Data } from "meta";
 
-const getLastModified = (page: Page) =>
-  page.data.lastModified as Date | undefined || page.data.date;
+const dateCompare = (...pages: [Page, Page]) => {
+  const pagesLastModified = pages.map((page) => page.data as Data)
+    .map((data) => data.lastModified ?? data.date ?? new Date(0))
+    .map((date) => date.getTime())
 
-const dateCompare = (...pages: [Page, Page]) =>
-  pages.map(getLastModified)
-    .map((date) => date?.valueOf())
-    .reduce((...dateValues) => dateValues[0]! - dateValues[1]!) ?? 0;
+  return pagesLastModified[0] - pagesLastModified[1];
+}
 
 export const pages = {
   dateAscending: dateCompare,
-  dateDescending: (...pages: [Page, Page]) =>
-    dateCompare(...pages.reverse() as [Page, Page]),
+  dateDescending: (...pages: [Page, Page]) => -dateCompare(...pages),
 };
