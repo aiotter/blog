@@ -3,14 +3,20 @@
 import * as Nano from "nano";
 import site from "site";
 import { BreadcrumbList } from "components/breadcrumb-list.tsx";
-import { Created, Modified, PullRequest, Source } from "components/badge.tsx";
+import {
+  Created,
+  History,
+  Modified,
+  PullRequest,
+  Source,
+} from "components/badge.tsx";
 import { Comments } from "components/comments.tsx";
 import { Data } from "meta";
 
 export const layout = "layouts/base.tsx";
 
 const template: Nano.FC<Data & { children: Nano.Component[] }> = (
-  { children, tags, title, url, date, lastModified },
+  { children, tags, title, url, date, lastModified, sourceFile },
 ) => {
   return (
     <>
@@ -65,11 +71,15 @@ const template: Nano.FC<Data & { children: Nano.Component[] }> = (
                 )}
 
                 <div name="source">
-                  <Source url={url as string} />
+                  <Source path={sourceFile} />
+                </div>
+
+                <div name="history">
+                  <History path={sourceFile} />
                 </div>
 
                 <div name="pull-request">
-                  <PullRequest url={url as string} />
+                  <PullRequest path={sourceFile} />
                 </div>
               </div>
             </section>

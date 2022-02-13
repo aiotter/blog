@@ -91,6 +91,11 @@ site.process([".css.ts"], (page) => page.dest.ext = ".css");
 import autoTitle from "plugins/auto-title.ts";
 site.use(autoTitle());
 
+site.preprocess(
+  "*",
+  (page) => page.data.sourceFile = page.src.path + page.src.ext ?? "",
+);
+
 site.loadAssets([".css"]);
 
 export default site;

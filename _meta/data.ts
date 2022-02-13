@@ -5,4 +5,6 @@ export interface Data extends BaseData {
   type?: "post" | "tag";
   /** Only for tag page */
   tag?: string;
+  /** Path of source file */
+  sourceFile: string;
 }
