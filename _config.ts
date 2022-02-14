@@ -98,6 +98,11 @@ site.preprocess(
   (page) => page.data.sourceFile = page.src.path + page.src.ext ?? "",
 );
 
+site.preprocess(
+  "*",
+  (page) => page.data.tags = page.data.tags?.map((tag) => tag.toLowerCase()),
+);
+
 site.loadAssets([".css"]);
 
 export default site;

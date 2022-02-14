@@ -3,20 +3,18 @@
 
 import * as Nano from "nano";
 import site from "site";
-import {relative} from "std/path/mod.ts";
+import { relative } from "std/path/mod.ts";
 import { Data, sort, url } from "meta";
 import { BreadcrumbList } from "components/breadcrumb-list.tsx";
 
-export const layout = "layouts/base.tsx";
-
 export default function* (): Generator<Data> {
   const tags = new Set(
-    site.pages.map((page) => page.data.tags).filter(Boolean).flat(),
+    site.pages.map((page) => page.data.tags).flat().filter(Boolean)
+      .map((tag) => tag!.toLowerCase()),
   );
   for (const tag of tags) {
-    if (!tag) continue;
-
     const title = `#${tag}`;
+    const sourceFile = relative(site.src(), new URL(import.meta.url).pathname);
 
     yield {
       url: url.tag(tag),
@@ -24,31 +22,37 @@ export default function* (): Generator<Data> {
       tag,
       layout: "layouts/base.tsx",
       type: "tag",
-      sourceFile: relative(site.src(), import.meta.url),
+      sourceFile,
       content: () => (
         <>
           <h1>{title}</h1>
           <BreadcrumbList
             items={[{
               name: "tags",
-              url: site.url(new URL("./tags.tsx", import.meta.url).href),
+              url: site.url(
+                relative(
+                  site.src(),
+                  new URL("./tags.tsx", import.meta.url).pathname,
+                ),
+              ),
             }, { name: title, url: url.tag(tag) }]}
           />
-          <p class="my-8 font-bold">Tag ページにレンダリングの問題があることを確認しています。現在修正中です。</p>
-          <ol>
-            {site.pages
-              .filter((page) => page.data.tags?.includes(tag))
-              .sort(sort.pages.dateDescending)
-              .map(
-                (page) => (
-                  <li>
-                    <a href={site.url(page.data.url as string)}>
-                      {page.data.title}
-                    </a>
-                  </li>
-                ),
-              )}
-          </ol>
+          <main class="my-5">
+            <ol>
+              {site.pages
+                .filter((page) => page.data.tags?.includes(tag))
+                .sort(sort.pages.dateDescending)
+                .map(
+                  (page) => (
+                    <li class="list-disc">
+                      <a href={site.url(page.data.url as string)}>
+                        {page.data.title}
+                      </a>
+                    </li>
+                  ),
+                )}
+            </ol>
+          </main>
         </>
       ),
     };

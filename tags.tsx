@@ -4,6 +4,7 @@
 import * as Nano from "https://deno.land/x/nano_jsx@v0.0.26/mod.ts";
 import { BreadcrumbList } from "components/breadcrumb-list.tsx";
 import site from "site";
+import { relative } from "std/path/mod.ts";
 import { Data, Page } from "lume/core.ts";
 
 export const layout = "layouts/base.tsx";
@@ -17,7 +18,12 @@ function getSortedTags(pages: Page[]) {
 export default (data: Data) => (
   <>
     <h1>Tags</h1>
-    <BreadcrumbList items={[{ name: "tags", url: data.url as string }]} />
+    <BreadcrumbList
+      items={[{
+        name: "tags",
+        url: site.url(relative(site.src(), new URL(import.meta.url).pathname)),
+      }]}
+    />
     <main>
       <ul>
         {site.pages.filter((page) => page.data.tag).sort((a, b) =>
