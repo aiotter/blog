@@ -3,6 +3,7 @@
 
 import * as Nano from "nano";
 import site from "site";
+import {relative} from "std/path/mod.ts";
 import { Data, sort, url } from "meta";
 import { BreadcrumbList } from "components/breadcrumb-list.tsx";
 
@@ -23,6 +24,7 @@ export default function* (): Generator<Data> {
       tag,
       layout: "layouts/base.tsx",
       type: "tag",
+      sourceFile: relative(site.src(), import.meta.url),
       content: () => (
         <>
           <h1>{title}</h1>
