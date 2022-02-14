@@ -23,7 +23,7 @@ window.React ||= { createElement: Nano.h, Fragment: Nano.Fragment };
 *******************************************************************/
 
 import * as Nano from "https://deno.land/x/nano_jsx@v0.0.26/mod.ts";
-import { Element, Node, nodesFromString, NodeType } from "lume/deps/dom.ts";
+import { DOMParser, Element, Node, NodeType } from "lume/deps/dom.ts";
 import { Data, Engine, Helper, Site } from "lume/core.ts";
 import moduleLoader from "lume/core/loaders/module.ts";
 import { getImportMap, ImportMap, merge } from "lume/core/utils.ts";
@@ -38,10 +38,10 @@ function isGeneratorFunction(content: unknown) {
 
 // patch of unimplemented function
 function createDocumentFragment(html: string) {
-  const documentFragment = nodesFromString("");
-  // @ts-ignore 2339
-  documentFragment.innerHTML = html;
-  return documentFragment;
+  const doc = new DOMParser().parseFromString(`<html/>`, "text/html")!;
+  const div = doc.createElement("div");
+  div.innerHTML = html;
+  return div;
 }
 
 // Export client side JavaScript
@@ -139,13 +139,13 @@ export class NanoJsxEngine implements Engine {
   render(
     content: Nano.Component | Nano.FC | AsyncGeneratorFunction,
     data: Data,
-  ) {
+  ): unknown {
     if (isGeneratorFunction(content)) {
       // deno-lint-ignore no-this-alias
       const nanoEngine = this;
       return (async function* (generator: AsyncGeneratorFunction) {
         for await (const data of generator() as AsyncGenerator<Data>) {
-          const content = nanoEngine.renderSync(
+          const content = await nanoEngine.render(
             data.content as Nano.Component,
             data,
           );
@@ -153,12 +153,7 @@ export class NanoJsxEngine implements Engine {
         }
       })(content as AsyncGeneratorFunction);
     }
-    return Promise.resolve(
-      this.renderSync(content as Nano.Component | Nano.FC, data),
-    );
-  }
 
-  renderSync(content: Nano.Component | Nano.FC, data: Data): string {
     if (!data.children && typeof data.content === "string") {
       // we are rendering layout:
       //   typeof content is function and typeof data.content is string
@@ -168,11 +163,10 @@ export class NanoJsxEngine implements Engine {
       getNewLineTextNodes(doc).forEach((node) => node.remove());
 
       const elements = Array.from(doc.childNodes)
-        .filter((node) => node.nodeType === NodeType.ELEMENT_NODE)
-        .map((node) => {
-          node.toString = () => (node as Element).outerHTML;
-          return node;
-        }) as Element[];
+        .filter((node) => node.nodeType === NodeType.ELEMENT_NODE) as Element[];
+      elements.forEach((node) =>
+        node.toString = () => (node as Element).outerHTML
+      );
       data.children = elements;
     }
 
@@ -181,12 +175,20 @@ export class NanoJsxEngine implements Engine {
       data[name] ||= helper;
     }
 
+    data.children ||= data.content;
+
     const { children, ...props } = data;
-    if (Array.isArray(children)) {
-      return Nano.renderSSR(() => Nano.h(content, props, ...children));
-    } else {
-      return Nano.renderSSR(() => Nano.h(content, props, children));
-    }
+    const element = () =>
+      Nano.h(content, props, ...[
+        Array.isArray(children) ? children : [children],
+      ]);
+    element.toString = () => Nano.renderSSR(element);
+    return element;
+  }
+
+  renderSync(content: Nano.Component | Nano.FC, data: Data) {
+    return (this.render(content as Nano.Component | Nano.FC, data) as Nano.FC)
+      .toString();
   }
 }
 
