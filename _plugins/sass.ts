@@ -1,6 +1,5 @@
 import { Data, Site } from "lume/core.ts";
 import { merge } from "lume/core/utils.ts";
-import { degrass } from "https://deno.land/x/degrass/mod.ts";
 import { readAll } from "std/streams/conversion.ts";
 
 export interface Options {
