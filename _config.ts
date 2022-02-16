@@ -75,6 +75,7 @@ site.use(windicss({
   },
   css: [
     ".markdown-body a { @apply link font-semibold }",
+    ".markdown-body ul { @apply list-disc }",
     "h1, h2, h3, h4, h5, h6 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold }",
     "h1 { @apply text-4xl }",
     "h2 { @apply text-3xl }",
