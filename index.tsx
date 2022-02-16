@@ -2,7 +2,7 @@
 
 import site from "site";
 import { Data } from "meta";
-import { Created, Modified, Tag } from "components/badge.tsx";
+import { Badge, Created, Modified, Tag } from "components/badge.tsx";
 import { sort } from "meta";
 
 export const layout = "layouts/base.tsx";
@@ -13,7 +13,7 @@ const BlogPosts = () => {
     .sort(sort.pages.dateDescending);
 
   return (
-    <ul class="max-w-xl space-y-10">
+    <ul class="space-y-10">
       {blogPosts.map((page) => (
         <li class="flex flex-row flex-wrap gap-y-1 border-b-2">
           <div name="page-title">
@@ -45,7 +45,35 @@ const BlogPosts = () => {
 
 export default (_data: Data) => (
   <main>
-    <h1>最新の投稿</h1>
-    <BlogPosts />
+    <div class="flex flex-row flex-wrap justify-center mb-20">
+      <a href="./about.md">
+        <img
+          src="https://avatars.githubusercontent.com/aiotter"
+          class="rounded-full w-60"
+        />
+      </a>
+      <div class="flex flex-col my-auto mx-5">
+        <div class="border-b-5 px-5 mb-3">
+          <h1 class="text-3xl my-0 font-bold">
+            <a href="./about.md" class="link">aiotter</a> のブログ
+          </h1>
+        </div>
+        <div class="flex gap-2 mx-auto">
+          <a href="https://twitter.com/aiotter_tech">
+            <Badge logo="twitter" logoColor="white" color="555555">
+              twitter
+            </Badge>
+          </a>
+          <a href="https://github.com/aiotter">
+            <Badge logo="github" color="555555">GitHub</Badge>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-xl mx-auto">
+      <h1 class="clear-both">最新の投稿</h1>
+      <BlogPosts />
+    </div>
   </main>
 );

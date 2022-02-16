@@ -4,7 +4,7 @@ import * as git from "https://esm.sh/isomorphic-git@1.10.3";
 
 export const repository = {
   url: "https://github.com/aiotter/blog",
-  branch: await git.currentBranch({fs, dir: Deno.cwd()}) as string,
+  branch: await git.currentBranch({ fs, dir: Deno.cwd() }) as string,
 };
 
 import footnote from "https://jspm.dev/markdown-it-footnote@3.0.3";
@@ -70,9 +70,11 @@ site.use(windicss({
     shortcuts: {
       "bg-shadow": "rounded inset-0 bg-teal-200 opacity-25 -z-1",
       "metadata": "text-warm-gray-600",
+      "link": "text-teal-600 hover:underline",
     },
   },
   css: [
+    ".markdown-body a { @apply link font-semibold }",
     "h1, h2, h3, h4, h5, h6 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold }",
     "h1 { @apply text-4xl }",
     "h2 { @apply text-3xl }",
