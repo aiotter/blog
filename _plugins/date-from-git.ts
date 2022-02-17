@@ -50,11 +50,25 @@ async function getCommits(site: Site, page: Page) {
   }
 }
 
-async function setDates(site: Site, page: Page) {
+export interface Options {
+  /** The list of extensions this plugin applies to */
+  extensions: string[];
+  /** Overwrite created date */
+  overwrite: boolean;
+}
+
+export const defaults: Options = {
+  extensions: [".html"],
+  overwrite: true,
+}
+
+async function setDates(site: Site, options: Options, page: Page) {
   const { created, lastModified } = await getCommits(site, page);
-  if (created) {
+
+  if (options.overwrite && created) {
     page.data.date = new Date(created.commit.author.timestamp * 1000);
   }
+
   if (lastModified) {
     page.data.lastModified ||= new Date(
       lastModified.commit.author.timestamp * 1000,
@@ -62,8 +76,9 @@ async function setDates(site: Site, page: Page) {
   }
 }
 
-export default function () {
+export default function (userOptions?: Partial<Options>) {
+  const options = {...defaults, ...userOptions};
   return (site: Site) => {
-    site.preprocess([".html"], setDates.bind(null, site));
+    site.preprocess(options.extensions, setDates.bind(null, site, options));
   };
 }
