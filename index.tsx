@@ -46,7 +46,7 @@ const BlogPosts = () => {
 export default (_data: Data) => (
   <main>
     <div class="flex flex-row flex-wrap justify-center mb-20">
-      <a href="./about.md">
+      <a href="./about.mdx">
         <img
           src="https://avatars.githubusercontent.com/aiotter"
           class="rounded-full w-60"
@@ -55,7 +55,7 @@ export default (_data: Data) => (
       <div class="flex flex-col my-auto mx-5">
         <div class="border-b-5 px-5 mb-3">
           <h1 class="text-3xl my-0 font-bold">
-            <a href="./about.md" class="link">aiotter</a> のブログ
+            <a href="./about.mdx" class="link">aiotter</a> のブログ
           </h1>
         </div>
         <div class="flex gap-2 mx-auto">

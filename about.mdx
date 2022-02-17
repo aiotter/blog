@@ -1,10 +1,21 @@
----
-layout: layouts/base.tsx
----
-<div class="markdown-content">
-<a href="/" class="text-lg">← 🏠</a>
+import * as Nano from "nano";
+import { BreadcrumbList } from "components/breadcrumb-list.tsx";
 
-# aiotter について
+export const layout = "layouts/base.tsx";
+
+<Nano.Helmet>
+  <link href="/primitives.css" rel="stylesheet" />
+  <link
+    href="https://unpkg.com/@primer/css@19.3.0/dist/markdown.css"
+    rel="stylesheet"
+  />
+</Nano.Helmet>
+
+<h1 class="mb-1">aiotter について</h1>
+
+<BreadcrumbList items={[{ name: "about", url: "./index.tsx" }]} />
+
+<div class="markdown-body mt-10">
 
 Hello, I'm <highlight>Yuto Oguchi</highlight> aka @aiotter
 
