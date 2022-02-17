@@ -94,7 +94,7 @@ site.use(windicss({
   ],
 }));
 
-import sass from "plugins/sass.ts";
+import sass from "https://raw.githubusercontent.com/lumeland/experimental-plugins/main/sass/sass.ts";
 site.use(sass());
 
 // Auto generate CSS files
