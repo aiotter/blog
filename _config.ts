@@ -52,8 +52,17 @@ site.use(svgo());
 import terser from "lume/plugins/terser.ts";
 site.use(terser());
 
-import nanoJsx from "plugins/nano-jsx.tsx";
+import nanoJsx, { NanoJsxEngine } from "plugins/nano-jsx.tsx";
 site.use(nanoJsx({ importMap: new URL("import_map.json", import.meta.url) }));
+
+import mdx from "plugins/mdx.ts";
+import * as runtime from "nano/jsx-runtime";
+site.use(
+  mdx({
+    mdxOptions: { ...runtime, useDynamicImport: true },
+    jsxEngine: new NanoJsxEngine(),
+  }),
+);
 
 import dateFromGit from "plugins/date-from-git.ts";
 site.use(dateFromGit());

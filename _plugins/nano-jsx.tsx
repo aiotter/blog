@@ -138,8 +138,13 @@ export class NanoJsxEngine implements Engine {
 
   render(
     content: Nano.Component | Nano.FC | AsyncGeneratorFunction,
-    data: Data,
+    data?: Data,
   ): unknown {
+    // Create dummy data for data-less rendering
+    if (!data) {
+      data = { content };
+    }
+
     if (isGeneratorFunction(content)) {
       // deno-lint-ignore no-this-alias
       const nanoEngine = this;
