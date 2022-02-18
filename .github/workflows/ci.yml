@@ -3,10 +3,10 @@ name: ci
 on:
   push:
     branches:
-      - lume
+      - master
   pull_request:
     branches:
-      - lume
+      - master
 
 jobs:
   deploy:
