@@ -45,7 +45,7 @@ const BlogPosts = () => {
 
 export default (_data: Data) => (
   <main>
-    <div class="flex flex-row flex-wrap justify-center mb-20">
+    <div class="flex flex-row flex-wrap gap-y-10 justify-center mb-20">
       <a href="./about.mdx">
         <img
           src="https://avatars.githubusercontent.com/aiotter"
