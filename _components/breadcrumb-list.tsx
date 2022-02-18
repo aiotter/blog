@@ -57,9 +57,9 @@ export const BreadcrumbList: Nano.FC<
           </a>
         </li>
         {items.map((items, i) => (
-          <li class="flex-initial whitespace-nowrap before:(font-awesome font-black mx-1.5 content-['\f0da']) w-max">
+          <li class="flex-initial whitespace-nowrap before:font-awesome before:font-black before:mx-1.5 before:content-['\f0da'] w-max">
             {items.map(({ name, url }) => (
-              <span class="not-only-child:(first:before:content-['{'] last:after:content-['}']) not-last:after:content-[',_']">
+              <span class="first:before:content-['{'] last:after:content-['}'] after:content-[',_'] only:before:content-[''] only:after:content-['']">
                 <a href={url} class="p-0.5">{name}</a>
               </span>
             ))}

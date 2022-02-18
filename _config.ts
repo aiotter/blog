@@ -70,29 +70,8 @@ site.use(dateFromGit());
 import asciidoc from "plugins/asciidoctor-js.ts";
 site.use(asciidoc());
 
-import windicss from "plugins/windicss.ts";
-site.use(windicss({
-  config: {
-    theme: {
-      extend: { fontFamily: { awesome: ['"Font Awesome 5 Free"'] } },
-    },
-    shortcuts: {
-      "bg-shadow": "rounded inset-0 bg-teal-200 opacity-25 -z-1",
-      "metadata": "text-warm-gray-600",
-      "link": "text-teal-600 hover:underline",
-    },
-  },
-  css: [
-    ".markdown-body a { @apply link font-semibold }",
-    ".markdown-body ul { @apply list-disc }",
-    "h1, h2, h3, h4, h5, h6 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold }",
-    "h1 { @apply text-4xl }",
-    "h2 { @apply text-3xl }",
-    "h3 { @apply text-2xl }",
-    "h4 { @apply text-xl }",
-    "h5 { @apply text-lg }",
-  ],
-}));
+import tailwindcss from "plugins/tailwindcss.ts";
+site.use(tailwindcss());
 
 import sass from "https://raw.githubusercontent.com/lumeland/experimental-plugins/main/sass/sass.ts";
 site.use(sass());

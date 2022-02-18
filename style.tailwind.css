@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .bg-shadow { @apply rounded inset-0 bg-teal-200 opacity-25 z-[-1] }
+  .metadata { @apply text-warm-gray-600 }
+  .link { @apply text-teal-600 hover:underline }
+}
+
+.markdown-body a { @apply link font-semibold }
+.markdown-body ul { @apply list-disc }
+h1, h2, h3, h4, h5, h6 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold }
+h1 { @apply text-4xl }
+h2 { @apply text-3xl }
+h3 { @apply text-2xl }
+h4 { @apply text-xl }
+h5 { @apply text-lg }

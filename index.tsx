@@ -53,7 +53,7 @@ export default (_data: Data) => (
         />
       </a>
       <div class="flex flex-col my-auto mx-5">
-        <div class="border-b-5 px-5 mb-3">
+        <div class="border-b-4 px-5 mb-3">
           <h1 class="text-3xl my-0 font-bold">
             <a href="./about.mdx" class="link">aiotter</a> のブログ
           </h1>
