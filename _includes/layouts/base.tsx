@@ -30,7 +30,7 @@ const template: Nano.FC<{ children: Nano.Component } & Data> = (
         <link href="/style.css" rel="stylesheet" type="text/css" />
         <meta name="viewport" content="width=device-width,initial-scale=1.0" />
         <meta property="og:image" content={image(data)} />
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content={site.url(data.url as string, true)} />
         <meta name="twitter:title" content={data.title} />
         <meta name="twitter:image" content={image(data)} />
