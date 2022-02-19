@@ -3,6 +3,7 @@
     "site": "./_config.ts",
     "plugins/": "./_plugins/",
     "components/": "./_components/",
+    "deps/": "./_deps/",
     "meta": "./_meta/mod.ts",
     "lume": "https://deno.land/x/lume@v1.5.1/mod.ts",
     "lume/": "https://deno.land/x/lume@v1.5.1/",

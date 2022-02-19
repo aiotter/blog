@@ -2,8 +2,11 @@ import {
   createCanvas,
   loadImage,
 } from "https://deno.land/x/canvas@v1.4.1/mod.ts";
-import { TinySegmenter } from "./tiny-segmenter.js";
+import { TinySegmenter } from "deps/tiny-segmenter.js";
 import { Image } from "https://deno.land/x/imagescript@v1.2.11/mod.ts";
+import { relative } from "std/path/mod.ts";
+import { Data } from "meta";
+import site from "site";
 
 function multilineJapanese(text: string, maxSize: number): string {
   const segmenter = new TinySegmenter();
@@ -80,4 +83,19 @@ export async function createImage(text: string) {
 
   // Output
   return canvas.toBuffer("image/png");
+}
+
+export const renderOrder = 100;
+export default async function* (): AsyncGenerator<Omit<Data, "sourceFile">> {
+  for (const page of site.pages) {
+    if (page.data.type === "post" && page.data.title) {
+      yield {
+        url: site.url(relative(
+          site.src(),
+          new URL(`./image/${page.dest.path}.png`, import.meta.url).pathname,
+        )),
+        content: await createImage(String(page.data.title)),
+      };
+    }
+  }
 }

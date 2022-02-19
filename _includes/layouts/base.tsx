@@ -8,31 +8,32 @@
 
 import * as Nano from "nano";
 import site from "site";
+import { Data } from "meta";
 
-function image(text: string) {
-  const url = new URL("/ogp/image", site.url("", true));
-  url.searchParams.set("text", text);
+function image(data: Data) {
+  const url = new URL(
+    "/ogp/image" + data.url + "index.png",
+    site.url("", true),
+  );
   return url.href;
 }
 
-const template: Nano.FC<
-  { children: Nano.Component; title: string; url: string }
-> = (
-  { children, title, url },
+const template: Nano.FC<{ children: Nano.Component } & Data> = (
+  { children, ...data },
 ) => {
   const App: Nano.FC = () => (
     <>
       <Nano.Helmet>
         {() => {
-          if (title) return <title>{title}</title>;
+          if (data.title) return <title>{data.title}</title>;
         }}
         <link href="/style.css" rel="stylesheet" type="text/css" />
         <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-        <meta property="og:image" content={image(title)} />
+        <meta property="og:image" content={image(data)} />
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:url" content={site.url(url, true)} />
-        <meta name="twitter:title" content={title} />
-        <meta name="twitter:image" content={image(title)} />
+        <meta name="twitter:url" content={site.url(data.url as string, true)} />
+        <meta name="twitter:title" content={data.title} />
+        <meta name="twitter:image" content={image(data)} />
         <meta name="twitter:creator" content="aiotter_tech" />
       </Nano.Helmet>
 
