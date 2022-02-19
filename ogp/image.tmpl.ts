@@ -36,9 +36,9 @@ export async function createImage(text: string) {
   const canvas = createCanvas(1200, 630);
   const ctx = canvas.getContext("2d");
   const font = await fetch(
-    "https://github.com/google/fonts/raw/main/ofl/hinamincho/HinaMincho-Regular.ttf",
+    "https://github.com/google/fonts/raw/main/ofl/kiwimaru/KiwiMaru-Medium.ttf",
   ).then((r) => r.arrayBuffer());
-  canvas.loadFont(font, { family: "Hina Mincho" });
+  canvas.loadFont(font, { family: "KiwiMaru" });
 
   // Border rendering
   ctx.save();
@@ -51,9 +51,9 @@ export async function createImage(text: string) {
 
   // Text rendering
   ctx.save();
-  ctx.translate(250, 200);
-  ctx.font = "64px Hina Mincho";
-  multilineJapanese(text, 14)
+  ctx.translate(270, 210);
+  ctx.font = "64px KiwiMaru";
+  multilineJapanese(text, 13)
     .split("\n")
     .forEach((line, i) => ctx.fillText(line, 0, 64 * i));
   ctx.restore();
