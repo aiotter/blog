@@ -8,8 +8,13 @@
   .link { @apply text-teal-600 hover:underline }
 }
 
-.markdown-body a { @apply link font-semibold }
-.markdown-body ul { @apply list-disc }
+.post-content a { @apply link font-semibold }
+.post-content ul { @apply list-disc }
+.post-content img { @apply mx-auto }
+.post-content figure { @apply mx-auto my-5 }
+.post-content figcaption { @apply text-center text-sm }
+.post-content cite { @apply italic }
+
 h1, h2, h3, h4, h5, h6 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold }
 h1 { @apply text-4xl }
 h2 { @apply text-3xl }

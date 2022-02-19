@@ -85,7 +85,7 @@ const template: Nano.FC<Data & { children: Nano.Component[] }> = (
             </section>
           </header>
 
-          <div class="markdown-body mb-5">
+          <div class="post-content markdown-body mb-5">
             {children}
           </div>
 
