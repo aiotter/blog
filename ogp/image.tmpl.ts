@@ -2,10 +2,36 @@ import {
   createCanvas,
   loadImage,
 } from "https://deno.land/x/canvas@v1.4.1/mod.ts";
+import { namespace } from "https://deno.land/x/cache@0.2.13/mod.ts";
 import { TinySegmenter } from "deps/tiny-segmenter.js";
 import dayjs from "dayjs";
-import { Data } from "meta";
+import { Data } from "lume/core.ts";
 import site from "site";
+
+// Path of the assets
+const fontPath =
+  "https://github.com/google/fonts/raw/main/ofl/kiwimaru/KiwiMaru-Medium.ttf";
+const backgroundImagePath =
+  "http://res.cloudinary.com/aiotter/image/upload/v1645355737/aiotter.com/ogp/image_base.png";
+
+// Cache font
+const fontCache = namespace("fontCache");
+if (localStorage.getItem("fontPath") !== fontPath) {
+  await fontCache.purge();
+  localStorage.setItem("fontPath", fontPath);
+}
+const font = await fontCache.cache(fontPath, { maxAge: 60 * 60 * 24 * 30 })
+  .then((f) => Deno.readFile(f.path));
+
+// Cache background image
+const backgroundImageCache = namespace("backgroundImageCache");
+if (localStorage.getItem("backgroundImagePath") !== backgroundImagePath) {
+  await backgroundImageCache.purge();
+  localStorage.setItem("backgroundImagePath", backgroundImagePath);
+}
+const background = await backgroundImageCache.cache(backgroundImagePath, {
+  maxAge: 60 * 60 * 24 * 30,
+}).then((f) => Deno.readFile(f.path)).then((data) => loadImage(data));
 
 function multilineJapanese(text: string, maxSize: number): string {
   const segmenter = new TinySegmenter();
@@ -30,25 +56,18 @@ function multilineJapanese(text: string, maxSize: number): string {
   );
 }
 
-export async function createImage(
+export function createImage(
   text: string,
   created: string,
 ) {
   // Canvas settings
   const canvas = createCanvas(1200, 630);
   const ctx = canvas.getContext("2d");
-  const font = await fetch(
-    "https://github.com/google/fonts/raw/main/ofl/kiwimaru/KiwiMaru-Medium.ttf",
-  ).then((r) => r.arrayBuffer());
   canvas.loadFont(font, { family: "KiwiMaru" });
 
   // Background rendering
-  const background = await fetch(
-    "http://res.cloudinary.com/aiotter/image/upload/v1645355737/aiotter.com/ogp/image_base.png",
-  ).then((r) => r.arrayBuffer());
   ctx.save();
-  const bgImage = await loadImage(new Uint8Array(background));
-  ctx.drawImage(bgImage, 0, 0);
+  ctx.drawImage(background, 0, 0);
   ctx.restore();
 
   // Text rendering
@@ -79,12 +98,12 @@ export async function createImage(
 }
 
 export const renderOrder = 100;
-export default async function* (): AsyncGenerator<Omit<Data, "sourceFile">> {
+export default function* (): Generator<Data> {
   for (const page of site.pages) {
     if (page.data.type === "post" && page.data.title) {
       yield {
         url: `./image/${page.dest.path}.png`,
-        content: await createImage(
+        content: createImage(
           String(page.data.title),
           dayjs(page.data.date).format("YYYY-MM-DD"),
         ),
