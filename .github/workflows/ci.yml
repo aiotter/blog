@@ -25,7 +25,7 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v2
         env:
-          cache-name: deno-sass
+          cache-name: deno-tailwind
         with:
           path: _bin
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Makefile') }}
