@@ -3,8 +3,7 @@ import {
   loadImage,
 } from "https://deno.land/x/canvas@v1.4.1/mod.ts";
 import { TinySegmenter } from "deps/tiny-segmenter.js";
-import { Image } from "https://deno.land/x/imagescript@v1.2.11/mod.ts";
-import { relative } from "std/path/mod.ts";
+import dayjs from "dayjs";
 import { Data } from "meta";
 import site from "site";
 
@@ -31,7 +30,10 @@ function multilineJapanese(text: string, maxSize: number): string {
   );
 }
 
-export async function createImage(text: string) {
+export async function createImage(
+  text: string,
+  created: string,
+) {
   // Canvas settings
   const canvas = createCanvas(1200, 630);
   const ctx = canvas.getContext("2d");
@@ -40,45 +42,36 @@ export async function createImage(text: string) {
   ).then((r) => r.arrayBuffer());
   canvas.loadFont(font, { family: "KiwiMaru" });
 
-  // Border rendering
+  // Background rendering
+  const background = await fetch(
+    "http://res.cloudinary.com/aiotter/image/upload/v1645355737/aiotter.com/ogp/image_base.png",
+  ).then((r) => r.arrayBuffer());
   ctx.save();
-  ctx.fillRect(25, 25, 1150, 580);
-  ctx.fillStyle = "white";
-  ctx.fillRect(45, 45, 1110, 540);
-  ctx.fillStyle = "black";
-  ctx.strokeRect(50, 50, 1100, 530);
+  const bgImage = await loadImage(new Uint8Array(background));
+  ctx.drawImage(bgImage, 0, 0);
   ctx.restore();
 
   // Text rendering
   ctx.save();
-  ctx.translate(270, 210);
+  ctx.translate(100, 100);
   ctx.font = "64px KiwiMaru";
-  multilineJapanese(text, 13)
+  ctx.fillStyle = "white";
+  multilineJapanese(text, 14)
     .split("\n")
-    .forEach((line, i) => ctx.fillText(line, 0, 64 * i));
+    .forEach((line, i) => ctx.fillText(line, 0, 64 * (i + 1)));
   ctx.restore();
 
-  // Avatar rendering
+  // Badge rendering
   ctx.save();
-  ctx.translate(70, 70); // image position
-  ctx.beginPath();
-  ctx.arc(80, 80, 80, 0, 2 * Math.PI, true);
-  ctx.clip();
-  const avatarImage = await loadImage(
-    "https://avatars.githubusercontent.com/aiotter",
-  );
-  ctx.drawImage(avatarImage, 0, 0, 160, 160);
-  ctx.restore();
-
-  // Icon rendering
-  ctx.save();
-  ctx.translate(250, 80);
-  const svg = await fetch(
-    "https://raw.githubusercontent.com/primer/octicons/main/icons/file-24.svg",
-  ).then((r) => r.text());
-  const png = await Image.renderSVG(svg, 48, Image.SVG_MODE_HEIGHT).encode();
-  const iconImage = await loadImage(png);
-  ctx.drawImage(iconImage, 0, 0);
+  // With http://res.cloudinary.com/aiotter/image/upload/v1645353424/aiotter.com/ogp/image_base.png
+  // ctx.translate(528, 485);
+  // ctx.font = "46px KiwiMaru";
+  // ctx.fillText(created, 0, 46);
+  ctx.font = "46px KiwiMaru";
+  // ctx.translate(470, 485); // 中央
+  ctx.translate(1100 - ctx.measureText(created).width, 530 - 46);
+  ctx.fillText(created, 0, 46);
+  // ctx.strokeRect(0, 0, ctx.measureText(created).width, 46);
   ctx.restore();
 
   // Output
@@ -90,11 +83,11 @@ export default async function* (): AsyncGenerator<Omit<Data, "sourceFile">> {
   for (const page of site.pages) {
     if (page.data.type === "post" && page.data.title) {
       yield {
-        url: site.url(relative(
-          site.src(),
-          new URL(`./image/${page.dest.path}.png`, import.meta.url).pathname,
-        )),
-        content: await createImage(String(page.data.title)),
+        url: `./image/${page.dest.path}.png`,
+        content: await createImage(
+          String(page.data.title),
+          dayjs(page.data.date).format("YYYY-MM-DD"),
+        ),
       };
     }
   }
