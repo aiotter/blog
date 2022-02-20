@@ -1,35 +1,50 @@
 /** @jsxImportSource nano */
 import dayjs from "dayjs";
-import { FC } from "nano";
+import { Component, FC } from "nano";
 import { repository } from "site";
 import { url } from "meta";
 
-interface Params<Tag> {
+interface Params {
   label?: string;
-  message?: string;
+  message: string; // Required
   color?: string;
   style?: "plastic" | "flat" | "flat-square" | "for-the-badge" | "social";
   logo?: string;
   logoColor?: string;
   logoWidth?: string;
   // "link" parameter is only for <object> tag embedding
-  link?: Tag extends "object" ? [string, string] : undefined;
+  link?: [string, string];
   labelColor?: string;
   cacheSeconds?: number | string;
-  width?: number | string;
-  height?: number | string;
 }
 
-export function Badge<Tag extends "img" | "object">(
-  { tag, children, width, height, ...params }:
-    & { tag?: Tag; children?: string }
-    & Params<Tag>,
+type ComponentParams<Tag> = {
+  tag?: Tag;
+  link?: Tag extends "object" ? [string, string] : undefined;
+  width?: number | string;
+  height?: number | string;
+} & Omit<Params, "link">;
+
+export function badge(
+  params: Params,
+  type: "image/svg+xml" | "image/png" = "image/svg+xml",
 ) {
-  const url = new URL("https://img.shields.io/static/v1");
+  if (!params.message) throw Error("message param is required");
+
+  let url: URL;
+  switch (type) {
+    case "image/svg+xml":
+      url = new URL("https://img.shields.io/static/v1");
+      break;
+    case "image/png":
+      url = new URL("https://raster.shields.io/static/v1");
+      break;
+    default:
+      throw Error(`type "${type}" is not supported`);
+  }
 
   // Default params
   params.label ||= "";
-  params.message ||= children;
 
   for (const [name, value] of Object.entries(params ?? {})) {
     if (name === "link") {
@@ -39,6 +54,25 @@ export function Badge<Tag extends "img" | "object">(
       url.searchParams.set(name, value);
     }
   }
+  return url;
+}
+
+export function Badge<Tag>(params: ComponentParams<Tag>): Component;
+export function Badge<Tag>(
+  params: Omit<ComponentParams<Tag>, "message"> & { children: [string] },
+): Component;
+export function Badge<Tag extends "img" | "object">(
+  { tag, children, width, height, ...params }: Partial<
+    ComponentParams<Tag> & { children: [string] }
+  >,
+) {
+  // If no message parameter specified, use children instead
+  const message = children?.length > 0
+    ? children.pop()
+    : params.message as string;
+  const urlParams: Params = { ...params, message };
+
+  const url = badge(urlParams);
 
   const tailwindClassName = [
     height && `h-[${height}px]`,
