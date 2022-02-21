@@ -16,7 +16,7 @@ jobs:
       id-token: write
       contents: read
     env:
-      DENO_DIR: .deno
+      DENO_DIR: ../.deno
 
     steps:
       - name: Clone repository
