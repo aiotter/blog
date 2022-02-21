@@ -67,6 +67,9 @@ site.use(
 import dateFromGit from "plugins/date-from-git.ts";
 site.use(dateFromGit());
 
+import history from "plugins/history.ts";
+site.use(history());
+
 import asciidoc from "plugins/asciidoctor-js.ts";
 site.use(asciidoc());
 

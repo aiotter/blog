@@ -72,7 +72,7 @@ export default (_data: Data) => (
     </div>
 
     <div class="max-w-xl mx-auto">
-      <h1 class="clear-both">最新の投稿</h1>
+      <h1 class="clear-both mt-[24px] mb-[16px] pb-[.3em] font-semibold text-4xl">最新の投稿</h1>
       <BlogPosts />
     </div>
   </main>

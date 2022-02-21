@@ -22,7 +22,7 @@ async function getCommits(site: Site, page: Page) {
       throw error;
     });
 
-  const created = commits[0] as git.ReadCommitResult | undefined;
+  const created = commits.slice(-1).pop() as git.ReadCommitResult | undefined;
   if (commits.length == 1) return { created, lastModified: undefined };
 
   try {
@@ -67,12 +67,14 @@ async function setDates(site: Site, options: Options, page: Page) {
 
   if (options.overwrite && created) {
     page.data.date = new Date(created.commit.author.timestamp * 1000);
+    page.data.createdCommit = created;
   }
 
   if (lastModified) {
     page.data.lastModified ||= new Date(
       lastModified.commit.author.timestamp * 1000,
     );
+    page.data.lastModifiedCommit = lastModified;
   }
 }
 

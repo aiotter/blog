@@ -24,4 +24,4 @@ const { colors } = primerPrimitives;
 const style = [...getVariables(colors.light_colorblind, "--color")]
   .map((item) => item.join(":"))
   .join(";");
-export default `.markdown-body{${style}}`;
+export default `.markdown-body, .TimelineItem {${style}}`;

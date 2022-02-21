@@ -8,16 +8,15 @@
   .link { @apply text-teal-600 hover:underline }
 }
 
-.post-content a { @apply link font-semibold }
-.post-content ul { @apply list-disc }
-.post-content img { @apply mx-auto }
-.post-content figure { @apply mx-auto my-5 }
-.post-content figcaption { @apply text-center text-sm }
-.post-content cite { @apply italic }
+.markdown-body a { @apply link font-semibold }
+.markdown-body ul { @apply list-disc }
+.markdown-body img { @apply mx-auto }
+.markdown-body figure { @apply mx-auto my-5 }
+.markdown-body figcaption { @apply text-center text-sm }
+.markdown-body cite { @apply italic }
 
-h1, h2, h3, h4, h5, h6 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold }
-h1 { @apply text-4xl }
-h2 { @apply text-3xl }
-h3 { @apply text-2xl }
-h4 { @apply text-xl }
-h5 { @apply text-lg }
+article h1 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-4xl }
+article h2 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-3xl }
+article h3 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-2xl }
+article h4 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-xl }
+article h5 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-lg }

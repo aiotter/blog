@@ -13,7 +13,7 @@ export const FormattedDate: FC<
       <script src="https://unpkg.com/dayjs@1.8.21/plugin/relativeTime.js" />
       <script>
         dayjs.extend(window.dayjs_plugin_relativeTime);
-        window.addEventListener('DOMContentLoaded', () =&gt;
+        window.addEventListener('DOMContentLoaded', () =&gt; {"{"}
           Array.from(document.getElementsByTagName("time"))
             .filter(element =&gt; element.attributes.relative)
             .forEach(element =&gt;
@@ -21,17 +21,17 @@ export const FormattedDate: FC<
                 dayjs(element.attributes.getNamedItem("datetime").value).fromNow()
             );
           Array.from(document.getElementsByTagName("time"))
-            .filter(element =&gt; element.attributes.relative)
+            .filter(element =&gt; !element.attributes.relative)
             .forEach(element =&gt;
               element.innerHTML =
                 dayjs(element.attributes.getNamedItem("datetime").value)
-                  .format(element.attributes.getNamedItem("format").value)
+                  .format(element.attributes.getNamedItem("format")?.value)
             );
-        );
+        {"}"});
       </script>
     </Helmet>
 
-    <time datetime={datetime.toISOString()} {...relative} {...format} >
+    <time datetime={datetime.toISOString()} {...{relative, format}} >
       {datetime.toLocaleDateString()}
     </time>
   </>
