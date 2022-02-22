@@ -26,8 +26,8 @@ export const Comments = (
       />
     </Helmet>
     {comments.map((comment) => (
-      <div class="TimelineItem md:ml-[88px]">
-        <div class="TimelineItem-avatar hidden md:block">
+      <div class="TimelineItem comment">
+        <div class="TimelineItem-avatar">
           <a href={comment.user?.html_url}>
             <img
               class="rounded-full"
@@ -40,7 +40,7 @@ export const Comments = (
           </a>
         </div>
 
-        <div class="TimelineItem-body border rounded-lg relative ml-[-16px]">
+        <div class="TimelineItem-body border rounded-lg relative">
           <div
             name="comment-header"
             class="flex gap-x-2 rounded-t-lg px-4 py-2 before:hidden md:before:block before:absolute before:block before:top-[11px] before:right-full before:left-[-8px] before:w-[8px] before:h-[16px] before:content-['_'] before:[clip-path:polygon(0_50%,100%_0,100%_100%)] before:bg-teal-100 bg-teal-100"
@@ -68,7 +68,7 @@ export const Comments = (
           </div>
           <div
             name="comment-body"
-            class="markdown-body bg-neutral-100 rounded-b-lg px-4 py-2"
+            class="markdown-body bg-background rounded-b-lg px-4 py-2"
             dangerouslySetInnerHTML={{
               __html: comment.body_html ?? comment.body,
             }}

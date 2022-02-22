@@ -20,3 +20,7 @@ article h2 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-3xl }
 article h3 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-2xl }
 article h4 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-xl }
 article h5 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-lg }
+
+.comments .TimelineItem { @apply md:ml-[88px] }
+.comments .TimelineItem-avatar { @apply hidden md:block }
+.comments .comment .TimelineItem-body { @apply ml-[-16px] }

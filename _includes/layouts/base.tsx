@@ -37,7 +37,7 @@ const template: Nano.FC<{ children: Nano.Component } & Data> = (
         <meta name="twitter:creator" content="aiotter_tech" />
       </Nano.Helmet>
 
-      <body class="bg-neutral-100 md:container md:max-w-3xl mx-auto p-5 sm:px-10 my-10 max-w-prose">
+      <body class="bg-background md:container md:max-w-3xl mx-auto p-5 sm:px-10 my-10 max-w-prose">
         {children}
       </body>
     </>
