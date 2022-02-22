@@ -26,8 +26,8 @@ export const Comments = (
       />
     </Helmet>
     {comments.map((comment) => (
-      <div class="TimelineItem ml-[88px]">
-        <div class="TimelineItem-avatar">
+      <div class="TimelineItem md:ml-[88px]">
+        <div class="TimelineItem-avatar hidden md:block">
           <a href={comment.user?.html_url}>
             <img
               class="rounded-full"
@@ -43,9 +43,17 @@ export const Comments = (
         <div class="TimelineItem-body border rounded-lg relative ml-[-16px]">
           <div
             name="comment-header"
-            class="flex rounded-t-lg px-4 py-2 before:absolute before:block before:top-[11px] before:right-full before:left-[-8px] before:w-[8px] before:h-[16px] before:content-['_'] before:[clip-path:polygon(0_50%,100%_0,100%_100%)] before:bg-teal-100 bg-teal-100"
+            class="flex gap-x-2 rounded-t-lg px-4 py-2 before:hidden md:before:block before:absolute before:block before:top-[11px] before:right-full before:left-[-8px] before:w-[8px] before:h-[16px] before:content-['_'] before:[clip-path:polygon(0_50%,100%_0,100%_100%)] before:bg-teal-100 bg-teal-100"
           >
             <h3>
+              <a href={comment.user?.html_url} class="md:hidden inline-block mr-2">
+                <img
+                  class="h-7 rounded-full inline-block"
+                  alt={"@" + comment.user?.login}
+                  src={comment.user?.avatar_url ??
+                    "https://user-images.githubusercontent.com/334891/29999089-2837c968-9009-11e7-92c1-6a7540a594d5.png"}
+                />
+              </a>
               <a href={comment.user?.html_url} class="link font-bold">
                 {comment.user!.login}
               </a>
