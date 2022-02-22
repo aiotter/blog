@@ -24,9 +24,9 @@ async function listCommitComments() {
 }
 
 function listCommit() {
-  const history = document.getElementById("history");
+  const history = document.querySelector('script[type="application/x.git-history+json"]');
   if (history) {
-    return (JSON.parse(history.innerText) as Data["history"])!.map(
+    return (JSON.parse(history.innerHTML) as Data["history"])!.map(
       (commit) => ({ id: commit.oid, message: commit.commit.message }),
     );
   }

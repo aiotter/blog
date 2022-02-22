@@ -47,8 +47,7 @@ function writeOutHistory(page: Page) {
   if (!page.document || !page.data.history) return;
 
   const history = page.document.createElement("script");
-  history.setAttribute("type", "application/json");
-  history.setAttribute("id", "history");
+  history.setAttribute("type", "application/x.git-history+json");
   history.innerText = JSON.stringify(
     page.data.history as git.ReadCommitResult[],
   );
