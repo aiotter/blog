@@ -51,13 +51,13 @@ export const BreadcrumbList: Nano.FC<
 
       <ol class="inline-flex flex-row flex-wrap align-middle relative block">
         <span class="absolute bg-shadow" />
-        <li class="whitespace-nowrap w-max">
+        <li>
           <a href="/" class="p-1">
             <i class="fas fa-home"></i>
           </a>
         </li>
         {items.map((items, i) => (
-          <li class="flex-initial whitespace-nowrap before:font-awesome before:font-black before:mx-1.5 before:content-['\f0da'] w-max">
+          <li class="flex-initial before:font-awesome before:font-black before:mx-1.5 before:content-['\f0da']">
             {items.map(({ name, url }) => (
               <span class="first:before:content-['{'] last:after:content-['}'] after:content-[',_'] only:before:content-[''] only:after:content-['']">
                 <a href={url} class="p-0.5">{name}</a>
