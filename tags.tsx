@@ -17,7 +17,7 @@ function getSortedTags(pages: Page[]) {
 
 export default (data: Data) => (
   <>
-    <h1>Tags</h1>
+    <h1 class="heading">Tags</h1>
     <BreadcrumbList
       items={[{
         name: "tags",

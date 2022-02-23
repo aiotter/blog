@@ -5,12 +5,6 @@
 @layer base {
   html { @apply font-body bg-background }
   body { @apply md:container md:max-w-3xl mx-auto p-5 sm:px-10 my-10 max-w-prose }
-  h1, h2, h3, h4, h5, h6 { @apply font-ud-shin-maru }
-  article h1 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-4xl }
-  article h2 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-3xl }
-  article h3 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-2xl }
-  article h4 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-xl }
-  article h5 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-lg }
 }
 
 @layer components {
@@ -26,9 +20,17 @@
   .comments .TimelineItem { @apply md:ml-[88px] }
   .comments .TimelineItem-avatar { @apply hidden md:block }
   .comments .comment .TimelineItem-body { @apply ml-[-16px] }
+
+  h1.heading { @apply font-ud-shin-go-bold mt-[24px] mb-[16px] pb-[.3em] text-4xl }
+  h2.heading { @apply font-ud-shin-go-bold mt-[24px] mb-[16px] pb-[.3em] text-3xl }
+  h3.heading { @apply font-ud-shin-go-bold mt-[24px] mb-[16px] pb-[.3em] text-2xl }
+  h4.heading { @apply font-ud-shin-go-bold mt-[24px] mb-[16px] pb-[.3em] text-xl }
+  h5.heading { @apply font-ud-shin-go-bold mt-[24px] mb-[16px] pb-[.3em] text-lg }
+  h6.heading { @apply font-ud-shin-go-bold mt-[24px] mb-[16px] pb-[.3em] }
 }
 
 @layer utilities {
   .link { @apply text-teal-600 hover:underline }
   .bg-shadow { @apply rounded inset-0 bg-teal-200 opacity-25 z-[-1] }
+  .font-ud-shin-go-bold { -webkit-text-stroke-width: 1px; @apply font-ud-shin-go; }
 }

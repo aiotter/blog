@@ -54,7 +54,7 @@ const template: Nano.FC<Data & { children: Nano.Component[] }> = (
           itemtype="https://schema.org/BlogPosting"
         >
           <header class="mb-5">
-            <h1 itemprop="headline">{title}</h1>
+            <h1 itemprop="headline" class="heading">{title}</h1>
             <section name="page-metadata" class="flex flex-col gap-3">
               <div name="breadcrumb-lists">
                 {tags && (

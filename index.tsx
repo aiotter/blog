@@ -15,27 +15,26 @@ const BlogPosts = () => {
   return (
     <ul class="space-y-10">
       {blogPosts.map((page) => (
-        <li class="flex flex-row flex-wrap gap-y-1 border-b-2">
-          <h2 name="page-title" class="text-2xl font-semibold">
-            <a
-              href={page.data.url}
-              class="text-2xl font-semibold"
+        <li class="gap-y-1 border-b-2 flex">
+          <div class="grow">
+            <div
+              name="page-metadata"
+              class="flex h-full items-end [shape-outside:inset(calc(100%-20px)_0_0)] gap-x-1 pb-1 float-right"
             >
-              {page.data.title}
-            </a>
-          </h2>
+              {page.data.tags!.map((tag) => <Tag>{tag}</Tag>)}
+              {page.data.lastModified &&
+                  <Modified>{page.data.lastModified as Date}</Modified> ||
+                <Created>{page.data.date!}</Created>}
+            </div>
 
-          <div
-            name="page-metadata"
-            class="flex flex-grow gap-x-1 items-end mb-1"
-          >
-            <div name="spacer" class="flex-grow" />
-
-            {page.data.tags!.map((tag) => <Tag>{tag}</Tag>)}
-
-            {page.data.lastModified &&
-                <Modified>{page.data.lastModified as Date}</Modified> ||
-              <Created>{page.data.date!}</Created>}
+            <h2
+              name="page-title"
+              class="inline font-ud-shin-go font-bold text-2xl"
+            >
+              <a href={page.data.url}>
+                {page.data.title}
+              </a>
+            </h2>
           </div>
         </li>
       ))}
@@ -54,7 +53,7 @@ export default (_data: Data) => (
       </a>
       <div class="flex flex-col my-auto mx-5">
         <div class="border-b-4 px-5 mb-3">
-          <h1 class="text-3xl my-0 font-bold">
+          <h1 class="text-3xl my-0 font-ud-shin-go-bold font-bold">
             <a href="./about.mdx" class="link">aiotter</a> のブログ
           </h1>
         </div>
@@ -72,7 +71,7 @@ export default (_data: Data) => (
     </div>
 
     <div class="max-w-xl mx-auto">
-      <h1 class="clear-both mt-[24px] mb-[16px] pb-[.3em] font-semibold text-4xl">最新の投稿</h1>
+      <h1 class="clear-both heading text-4xl">最新の投稿</h1>
       <BlogPosts />
     </div>
   </main>

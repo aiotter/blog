@@ -25,7 +25,7 @@ export default function* (): Generator<Data> {
       sourceFile,
       content: () => (
         <>
-          <h1 class="mt-[24px] mb-[16px] pb-[.3em] font-semibold text-4xl">{title}</h1>
+          <h1 class="heading">{title}</h1>
           <BreadcrumbList
             items={[{
               name: "tags",
