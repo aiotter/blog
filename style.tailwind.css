@@ -2,25 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  .bg-shadow { @apply rounded inset-0 bg-teal-200 opacity-25 z-[-1] }
-  .metadata { @apply text-warm-gray-600 }
-  .link { @apply text-teal-600 hover:underline }
+@layer base {
+  html { @apply font-body bg-background }
+  body { @apply md:container md:max-w-3xl mx-auto p-5 sm:px-10 my-10 max-w-prose }
+  h1, h2, h3, h4, h5, h6 { @apply font-ud-shin-maru }
+  article h1 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-4xl }
+  article h2 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-3xl }
+  article h3 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-2xl }
+  article h4 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-xl }
+  article h5 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-lg }
 }
 
-.markdown-body a { @apply link font-semibold }
-.markdown-body ul { @apply list-disc }
-.markdown-body img { @apply mx-auto }
-.markdown-body figure { @apply mx-auto my-5 }
-.markdown-body figcaption { @apply text-center text-sm }
-.markdown-body cite { @apply italic }
+@layer components {
+  /* .metadata { @apply text-warm-gray-600 } */
+  .markdown-body { @apply !font-body }
+  .markdown-body a { @apply link font-semibold }
+  .markdown-body ul { @apply list-disc }
+  .markdown-body img { @apply mx-auto }
+  .markdown-body figure { @apply mx-auto my-5 }
+  .markdown-body figcaption { @apply text-center text-sm }
+  .markdown-body cite { @apply italic }
 
-article h1 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-4xl }
-article h2 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-3xl }
-article h3 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-2xl }
-article h4 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-xl }
-article h5 { @apply mt-[24px] mb-[16px] pb-[.3em] font-semibold text-lg }
+  .comments .TimelineItem { @apply md:ml-[88px] }
+  .comments .TimelineItem-avatar { @apply hidden md:block }
+  .comments .comment .TimelineItem-body { @apply ml-[-16px] }
+}
 
-.comments .TimelineItem { @apply md:ml-[88px] }
-.comments .TimelineItem-avatar { @apply hidden md:block }
-.comments .comment .TimelineItem-body { @apply ml-[-16px] }
+@layer utilities {
+  .link { @apply text-teal-600 hover:underline }
+  .bg-shadow { @apply rounded inset-0 bg-teal-200 opacity-25 z-[-1] }
+}

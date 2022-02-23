@@ -16,14 +16,14 @@ const BlogPosts = () => {
     <ul class="space-y-10">
       {blogPosts.map((page) => (
         <li class="flex flex-row flex-wrap gap-y-1 border-b-2">
-          <div name="page-title">
+          <h2 name="page-title" class="text-2xl font-semibold">
             <a
               href={page.data.url}
               class="text-2xl font-semibold"
             >
               {page.data.title}
             </a>
-          </div>
+          </h2>
 
           <div
             name="page-metadata"

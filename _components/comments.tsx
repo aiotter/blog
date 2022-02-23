@@ -45,7 +45,7 @@ export const Comments = (
             name="comment-header"
             class="flex gap-x-2 rounded-t-lg px-4 py-2 before:hidden md:before:block before:absolute before:block before:top-[11px] before:right-full before:left-[-8px] before:w-[8px] before:h-[16px] before:content-['_'] before:[clip-path:polygon(0_50%,100%_0,100%_100%)] before:bg-teal-100 bg-teal-100"
           >
-            <h3>
+            <h3 class="font-sans">
               <a href={comment.user?.html_url} class="md:hidden inline-block mr-2">
                 <img
                   class="h-7 rounded-full inline-block"
