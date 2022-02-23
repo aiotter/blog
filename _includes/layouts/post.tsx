@@ -40,6 +40,10 @@ const template: Nano.FC<Data & { children: Nano.Component[] }> = (
           href="https://unpkg.com/@primer/css@19.3.0/dist/markdown.css"
           rel="stylesheet"
         />
+        <link
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+          rel="stylesheet"
+        />
         <script src="/scripts/comment.js" />
       </Nano.Helmet>
 
@@ -107,7 +111,7 @@ const template: Nano.FC<Data & { children: Nano.Component[] }> = (
           <div name="horizon" class="border-t-2 border-double relative">
             <h1 class="absolute mx-auto text-lg text-center inset-x-0 -top-4">
               <span class="bg-gray-200 px-3 [clip-path:polygon(0_50%,10px_0,calc(100%-10px)_0,100%_50%,calc(100%-10px)_100%,10px_100%)]">
-                コメント
+                <i class="fas fa-comments mx-2" />
               </span>
             </h1>
           </div>
