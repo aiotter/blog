@@ -12,15 +12,18 @@ const BlogPosts = () => {
     .filter((page) => page.data.type === "post")
     .sort(sort.pages.dateDescending);
 
+  // Using a trick to keep the badges on the right bottom
+  // cf. https://css-tricks.com/float-an-element-to-the-bottom-corner/
   return (
     <ul class="space-y-10">
       {blogPosts.map((page) => (
-        <li class="gap-y-1 border-b-2 flex">
-          <div class="grow">
+        <li class="gap-y-1 border-b-2 md:flex">
+          <div class="flex flex-col-reverse gap-1 md:block md:grow">
             <div
               name="page-metadata"
-              class="flex h-full items-end [shape-outside:inset(calc(100%-20px)_0_0)] gap-x-1 pb-1 float-right"
+              class="flex md:h-full md:items-end md:[shape-outside:inset(calc(100%-20px)_0_0)] gap-x-1 pb-1 md:float-right"
             >
+              <div name="spacer" class="grow" />
               {page.data.tags!.map((tag) => <Tag>{tag}</Tag>)}
               {page.data.lastModified &&
                   <Modified>{page.data.lastModified as Date}</Modified> ||
@@ -53,8 +56,8 @@ export default (_data: Data) => (
       </a>
       <div class="flex flex-col my-auto mx-5">
         <div class="border-b-4 px-5 mb-3">
-          <h1 class="text-3xl my-0 font-ud-shin-go-bold font-bold">
-            <a href="./about.mdx" class="link">aiotter</a> のブログ
+          <h1 class="text-3xl my-0 font-ud-shin-go-bold font-bold whitespace-nowrap">
+            <a href="./about.mdx" class="link mr-2">aiotter</a>のブログ
           </h1>
         </div>
         <div class="flex gap-2 mx-auto">
