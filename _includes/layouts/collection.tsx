@@ -48,7 +48,12 @@ const template: Nano.FC<Data & { children: Nano.Component[] }> = (
         itemid={collectionId}
       >
         <header name="collection-metadata" class="mb-5">
-          <h1 itemprop="name" class="heading">{data.title}</h1>
+          <h1
+            itemprop="name"
+            class="heading before:content-['\f07c'] before:font-awesome before:font-normal before:text-gray-700 before:mr-2"
+          >
+            {data.title}
+          </h1>
 
           <section name="breadcrumb-list">
             <BreadcrumbList
@@ -67,7 +72,9 @@ const template: Nano.FC<Data & { children: Nano.Component[] }> = (
             <i class="fa-solid fa-book-open" />
           </Horizon>
 
-          <PageList items={collectionPages} date />
+          <div class="max-w-xl mx-auto">
+            <PageList items={collectionPages} date />
+          </div>
         </section>
 
         <Comments data={data} />
