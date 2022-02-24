@@ -6,11 +6,12 @@ export interface Data extends BaseData {
   lastModified?: Date;
   lastModifiedCommit?: ReadCommitResult;
   createdCommit?: ReadCommitResult;
-  type?: "post" | "tag";
+  type?: "post" | "collection" | "collection-page" | "tag";
   /** Only for tag page */
   tag?: string;
   /** Path of source file */
-  sourceFile: string;
+  readonly sourceFile: string;
   /** History */
   history?: ReadCommitResult[];
+  repository: { url: string; branch: string };
 }

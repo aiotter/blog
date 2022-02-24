@@ -69,12 +69,13 @@ export async function clientSideScriptLoader(
   try {
     compileResult = await Deno.emit(path, {
       bundle: "module",
+      check: false,
       compilerOptions: {
         jsx: "react-jsx",
         jsxImportSource: "nano",
         target: "es2015",
         module: "es2015",
-        lib: ["dom", "dom.iterable", "deno.ns", "deno.unstable"],
+        // lib: ["dom", "dom.iterable", "deno.ns", "deno.unstable"],
       },
       importMap: mergedImportMap,
       importMapPath: "data:aplication/json,", // no base path
@@ -84,10 +85,11 @@ export async function clientSideScriptLoader(
     // retry without jsx-related compiler options
     compileResult = await Deno.emit(path, {
       bundle: "module",
+      check: false,
       compilerOptions: {
         target: "es2015",
         module: "es2015",
-        lib: ["dom", "dom.iterable", "deno.ns", "deno.unstable"],
+        // lib: ["dom", "dom.iterable", "deno.ns", "deno.unstable"],
       },
       importMap: mergedImportMap,
       importMapPath: "data:aplication/json,", // no base path

@@ -3,47 +3,11 @@
 import site from "site";
 import { Data } from "meta";
 import { Badge, Created, Modified, Tag } from "components/badge.tsx";
+import { PageList } from "components/page-list.tsx";
 import { sort } from "meta";
 
 export const layout = "layouts/base.tsx";
-
-const BlogPosts = () => {
-  const blogPosts = site.pages
-    .filter((page) => page.data.type === "post")
-    .sort(sort.pages.dateDescending);
-
-  // Using a trick to keep the badges on the right bottom
-  // cf. https://css-tricks.com/float-an-element-to-the-bottom-corner/
-  return (
-    <ul class="space-y-10">
-      {blogPosts.map((page) => (
-        <li class="gap-y-1 border-b-2 md:flex">
-          <div class="flex flex-col-reverse gap-1 md:block md:grow">
-            <div
-              name="page-metadata"
-              class="flex md:h-full md:items-end md:[shape-outside:inset(calc(100%-20px)_0_0)] gap-x-1 pb-1 md:float-right"
-            >
-              <div name="spacer" class="grow" />
-              {page.data.tags!.map((tag) => <Tag>{tag}</Tag>)}
-              {page.data.lastModified &&
-                  <Modified>{page.data.lastModified as Date}</Modified> ||
-                <Created>{page.data.date!}</Created>}
-            </div>
-
-            <h2
-              name="page-title"
-              class="inline font-ud-shin-go font-bold text-2xl"
-            >
-              <a href={page.data.url}>
-                {page.data.title}
-              </a>
-            </h2>
-          </div>
-        </li>
-      ))}
-    </ul>
-  );
-};
+export const renderOrder = 10;
 
 export default (_data: Data) => (
   <main>
@@ -75,7 +39,10 @@ export default (_data: Data) => (
 
     <div class="max-w-xl mx-auto">
       <h1 class="clear-both heading text-4xl">最新の投稿</h1>
-      <BlogPosts />
+      <PageList tag date items={
+        site.pages.filter((page) => ["post", "collection"].includes(page.data.type))
+          .sort(sort.pages.dateDescending)}
+      />
     </div>
   </main>
 );

@@ -1,17 +1,10 @@
 /** @jsxImportSource nano */
-/// <reference no-default-lib="true" />
-/// <reference lib="dom" />
-/// <reference lib="dom.asynciterable" />
-/// <reference lib="dom.iterable" />
-/// <reference lib="deno.ns" />
-/// <reference lib="deno.unstable" />
 
-import { Comments } from "components/comments.tsx";
+import { CommentsContent } from "components/comments.tsx";
 import { request } from "https://cdn.skypack.dev/@octokit/request@5.6.3?dts";
 import { hydrate } from "nano";
 import { Data } from "meta";
 
-// import { repository } from "site";
 const repository = { url: "https://github.com/aiotter/blog" };
 
 async function listCommitComments() {
@@ -24,7 +17,9 @@ async function listCommitComments() {
 }
 
 function listCommit() {
-  const history = document.querySelector('script[type="application/x.git-history+json"]');
+  const history = document.querySelector(
+    'script[type="application/x.git-history+json"]',
+  );
   if (history) {
     return (JSON.parse(history.innerHTML) as Data["history"])!.map(
       (commit) => ({ id: commit.oid, message: commit.commit.message }),
@@ -51,8 +46,9 @@ window.addEventListener("load", async () => {
   const comments = (await listCommitComments())
     .filter((comment) => commitIds.includes(comment.commit_id));
 
+console.log(comments)
   hydrate(
-    <Comments items={comments} />,
+    <CommentsContent items={comments} />,
     document.getElementById("comments"),
   );
 

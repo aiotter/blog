@@ -1,8 +1,7 @@
 /** @jsxImportSource nano */
 import dayjs from "dayjs";
 import { Component, FC } from "nano";
-import { repository } from "site";
-import { url } from "meta";
+import { Data, url } from "meta";
 
 interface Params {
   label?: string;
@@ -104,8 +103,8 @@ export const Modified: FC<{ children: Parameters<typeof dayjs>[0] }> = (
   </Badge>
 );
 
-export const Source: FC<{ path: string }> = ({ path }) => (
-  <a href={repository.url + "/blob/" + repository.branch + path}>
+export const Source: FC<{ data: Data }> = ({ data }) => (
+  <a href={data.repository.url + "/blob/" + data.repository.branch + data.sourceFile}>
     <Badge
       message="原稿"
       color="555555"
@@ -116,8 +115,8 @@ export const Source: FC<{ path: string }> = ({ path }) => (
   </a>
 );
 
-export const PullRequest: FC<{ path: string }> = ({ path }) => (
-  <a href={repository.url + "/edit/" + repository.branch + path}>
+export const PullRequest: FC<{ data: Data }> = ({ data }) => (
+  <a href={data.repository.url + "/edit/" + data.repository.branch + data.sourceFile}>
     <Badge
       message="修正提案"
       color="555555"
@@ -139,8 +138,8 @@ export const Tag: FC<{ children: string }> = ({ children: tag }) => (
   </a>
 );
 
-export const History: FC<{ path: string }> = ({ path }) => (
-  <a href={repository.url + "/commits/" + repository.branch + path}>
+export const History: FC<{ data: Data }> = ({ data }) => (
+  <a href={data.repository.url + "/commits/" + data.repository.branch + data.sourceFile}>
     <Badge
       message="歴史"
       color="555555"

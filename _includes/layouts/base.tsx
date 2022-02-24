@@ -36,6 +36,11 @@ const template: Nano.FC<{ children: Nano.Component } & Data> = (
         <meta name="twitter:image" content={image(data)} />
         <meta name="twitter:creator" content="aiotter_tech" />
 
+        <link
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+          rel="stylesheet"
+        />
+
         <script dangerouslySetInnerHTML={{__html: `(function(d) {
             var config = {
               kitId: 'qkx3nsf',
