@@ -11,6 +11,7 @@ import {
 } from "components/badge.tsx";
 import { Comments } from "components/comments.tsx";
 import { Data } from "meta";
+import site from "site";
 
 export const layout = "layouts/base.tsx";
 
@@ -41,14 +42,32 @@ const template: Nano.FC<Data & { children: Nano.Component[] }> = (
           <header class="mb-5">
             <h1 itemprop="headline" class="heading">{data.title}</h1>
             <section name="page-metadata" class="flex flex-col gap-3">
-              <div name="breadcrumb-list">
-                <BreadcrumbList
-                  items={Items.fromTags(data.tags)
-                    .concat({
+              <div name="breadcrumb-list" class="inline-flex flex-col gap-1">
+                <div>
+                  <BreadcrumbList
+                    items={[...Items.fromTags(data.tags), {
                       name: data.title as string,
                       url: data.url as string,
-                    })}
-                />
+                    }]}
+                  />
+                </div>
+                {data.type === "collection-page"
+                  ? (
+                    <div>
+                      <BreadcrumbList
+                        items={[{
+                          name: site.source
+                            .getFileOrDirectory(data.collection!)!
+                            .data.title as string,
+                          url: data.collection!,
+                        }, {
+                          name: data.title as string,
+                          url: data.url as string,
+                        }]}
+                      />
+                    </div>
+                  )
+                  : undefined}
               </div>
               <div name="badges" class="inline-flex gap-2">
                 <div name="created">
