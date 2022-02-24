@@ -2,6 +2,7 @@
 
 import { Helmet } from "nano";
 import { FormattedDate } from "components/date.tsx";
+import { Horizon } from "components/horizon.tsx";
 import { Data } from "meta";
 import { Endpoints } from "https://esm.sh/@octokit/types@6.34.0";
 type CommitComment =
@@ -85,13 +86,9 @@ export const CommentsContent = (
 
 export const Comments = ({ data }: { data: Data }) => (
   <section class="comments">
-    <div name="horizon" class="border-t-2 border-double relative">
-      <h1 class="absolute mx-auto text-lg text-center inset-x-0 -top-4">
-        <span class="bg-gray-200 px-3 [clip-path:polygon(0_50%,10px_0,calc(100%-10px)_0,100%_50%,calc(100%-10px)_100%,10px_100%)]">
-          <i class="fas fa-comments mx-2" />
-        </span>
-      </h1>
-    </div>
+    <Horizon>
+      <i class="fas fa-comments mx-2" />
+    </Horizon>
 
     <div id="comments">
       <CommentsContent

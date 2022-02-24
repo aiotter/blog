@@ -12,6 +12,7 @@ import {
 } from "components/badge.tsx";
 import { PageList } from "components/page-list.tsx";
 import { Comments } from "components/comments.tsx";
+import { Horizon } from "components/horizon.tsx";
 import { Data, sort } from "meta";
 import { Page } from "lume/core.ts";
 
@@ -61,6 +62,11 @@ const template: Nano.FC<Data & { children: Nano.Component[] }> = (
 
         <section name="collection-body" class="mb-16">
           <div class="markdown-body mb-5">{children}</div>
+
+          <Horizon class="my-10">
+            <i class="fa-solid fa-book-open" />
+          </Horizon>
+
           <PageList items={collectionPages} date />
         </section>
 

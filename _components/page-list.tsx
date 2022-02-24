@@ -32,7 +32,7 @@ export function Page(
           name="page-title"
           class={"inline font-ud-shin-go font-bold text-2xl" + (
             page.data.type === "collection"
-              ? " before:content-['\\f07b'] before:font-awesome before:font-normal before:mr-2"
+              ? " before:content-['\\f07c'] before:font-awesome before:font-normal before:text-gray-700 before:mr-2"
               : ""
           )}
         >
