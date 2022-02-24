@@ -12,8 +12,8 @@ import {
 } from "components/badge.tsx";
 import { PageList } from "components/page-list.tsx";
 import { Comments } from "components/comments.tsx";
-import { Data, sort, url as getUrl } from "meta";
-import { Directory, Page } from "lume/core.ts";
+import { Data, sort } from "meta";
+import { Page } from "lume/core.ts";
 
 export const layout = "layouts/base.tsx";
 
@@ -25,14 +25,6 @@ const template: Nano.FC<Data & { children: Nano.Component[] }> = (
   const collectionPages = Array.from(thisPage.parent!.pages.values())
     .filter((page) => page.data.url !== data.url)
     .sort(sort.pages.dateDescending);
-  const newestPage = collectionPages[0];
-  const oldestPage = collectionPages.slice(-1)[0];
-
-  // Modify page data
-  thisPage.data.date = oldestPage.data.date;
-  thisPage.data.lastModified = newestPage.data.lastModified as Date;
-  thisPage.data.type = "collection";
-  collectionPages.forEach((page) => page.data.type = "collection-page");
 
   return (
     <>

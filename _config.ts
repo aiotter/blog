@@ -1,4 +1,5 @@
 import lume from "lume/mod.ts";
+import { sort } from "meta";
 
 import footnote from "https://jspm.dev/markdown-it-footnote@3.0.3";
 const site = lume({
@@ -89,6 +90,29 @@ site.preprocess(
   "*",
   (page) => page.data.tags = page.data.tags?.map((tag) => tag.toLowerCase()),
 );
+
+// Set collection-page type for pages which use "collection" layout
+site.preprocess([".html"], (page) => {
+  if (
+    page.data.layout === "layouts/collection.tsx" ||
+    page.data.type === "collection"
+  ) {
+    page.data.type = "collection";
+
+    const collectionPages = [...page.parent!.pages.values()]
+      .filter((page) => page.data.type !== "collection")
+      .sort(sort.pages.dateDescending);
+    const newestPage = collectionPages[0];
+
+    page.data.lastModified = newestPage.data.lastModified;
+
+    // Set collection-page type for pages in the same directory as collection page
+    collectionPages.forEach((collectionPage) => {
+      collectionPage.data.type = "collection-page";
+      collectionPage.data.collection = page.data.sourceFile;
+    });
+  }
+});
 
 site.loadAssets([".css"]);
 

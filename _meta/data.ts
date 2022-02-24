@@ -9,6 +9,8 @@ export interface Data extends BaseData {
   type?: "post" | "collection" | "collection-page" | "tag";
   /** Only for tag page */
   tag?: string;
+  /** Only for collection-page: parent collection url */
+  collection?: string;
   /** Path of source file */
   readonly sourceFile: string;
   /** History */
