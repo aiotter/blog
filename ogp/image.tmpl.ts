@@ -100,7 +100,11 @@ export function createImage(
 export const renderOrder = 100;
 export default function* (): Generator<Data> {
   for (const page of site.pages) {
-    if (page.data.type === "post" && page.data.title) {
+    if (
+      ["post", "collection", "collection-post"].includes(
+        page.data.type as string,
+      ) && page.data.title
+    ) {
       yield {
         url: `./image/${page.dest.path}.png`,
         content: createImage(
