@@ -48,7 +48,9 @@ $ pio project init --ide=vim
 
 注意点として、`-DCMAKE_PREFIX_PATH` オプションには Xtensa 用の LLVM に含まれる `clang` を使用します。というわけで、 `ccls` の前に LLVM をコンパイルします。
 
- Espressif の LLVM フォークを clone し、README に従ってコンパイルします。めちゃめちゃ時間かかるので覚悟してください。ビルド済みバイナリを配布するとか中の人が言ってたの見たけどどうなったんかな……
+Espressif の LLVM フォークを clone し、README に従ってビルドします。めちゃめちゃ時間かかるので覚悟してください。
+Release のビルド済みバイナリを使いたいところですが、cmake 関係のファイルが足りなくてエラーになるため、自前でビルドする必要があります。
+`clang` が欲しいので `-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra` を指定しましょう。clang-tools-extra は不要かな？
 
 <https://github.com/espressif/llvm-project>
 
