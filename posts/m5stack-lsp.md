@@ -10,7 +10,74 @@ M5Stack CoreInk を購入しました。さっそく使おうとしたのです�
 <figcaption>LSPがエラーを吐く様子</figcaption>
 </figure>
 
-このエラーを解決する方法を残しておきます。LLVM のビルドが必要なのでめちゃめちゃ時間かかります。覚悟してください。
+このエラーを解決する方法を残しておきます。
+
+**当初この記事は ccls の設定方法を説明していましたが、clangd を使用するととても簡単に設定できることが分かったため、記事を書き直しました。
+ccls の設定方法は記事の最後に残してありますが、clangd の使用をおすすめします。**
+
+## 環境
+
+* macOS 12.2.1
+* PlatformIO v5.2.5 (Core)
+* Neovim v0.6.1
+* vim-lsp
+* clangd (C/C++ の Language Server)
+
+## 設定方法
+
+### clangd のビルド
+
+Espressif の LLVM フォークを clone し、README に従ってビルドします。めちゃめちゃ時間かかるので覚悟してください。
+`clangd` が欲しいので `-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra` を指定しましょう。
+
+<https://github.com/espressif/llvm-project>
+
+### vim-lsp の設定
+
+clangd は PlatformIO の出力する `compile_commands.json` を解釈できます。
+ただし、 `clang` 以外のコンパイラを使うように指定されているときは [Query-driver](https://clangd.llvm.org/design/compile-commands#query-driver) の設定が必要です。
+`--query-driver` オプションに実行しても安全なコンパイラの名前を指定することで、意図しない実行可能ファイルの実行を防ぐ仕組みとなっているためです。
+
+vim-lsp をこのように設定することで、 PlatformIO 環境上でのみ^[platformio.ini の存在を認識して動作を切り替えます] clangd の設定を変更して M5 用のコンパイラを使用させることができます。
+
+```vim
+let s:pio_project_root = lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), "platformio.ini")
+if s:pio_project_root->strlen() > 0 && executable("pio") && executable("clangd")
+  let s:pio_core = system("pio system info --json-output")->json_decode().core_dir.value
+  let s:compile_commands = glob(s:pio_project_root . '/.pio/**/compile_commands.json')->split("\n")[0]->fnamemodify(':p:h')
+
+  au User lsp_setup call lsp#register_server({
+  \ 'name': 'clangd',
+  \ 'cmd': ['/path/to/your/xtensa/clangd', '-background-index',
+  \         '--query-driver=' . s:pio_core . '/packages/*/bin/*',
+  \         '--compile-commands-dir=' . s:compile_commands,
+  \        ],
+  \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
+  \ })
+endif
+```
+
+新しいライブラリをインストールしたら `pio run -t compiledb` を実行して `compile_commands.json` を更新してください。
+複数の `compile_commands.json` が検出した場合、最初に検出したもののみを使用します。
+
+認識できないコンパイラオプションが含まれていることがあり、それがエラーを吐くので適宜 `.clangd` で取り除いてください。
+
+```yml
+CompileFlags:
+  # Add: [-isysroot=/User/aiotter/.platformio/packages/toolchain-xtensa32/xtensa-esp32-elf/sysroot/]
+  Remove: [-fstrict-volatile-bitfields]
+```
+isysroot を設定する必要があるらしいんですが、PlatformIO ではこれは指定しなくても動くようです。
+もしこの指定がないと動かなかった方がいたら教えて下さい。
+
+設定は以上です。お疲れさまでした。
+
+---
+
+# M5Stack の開発環境構築（LSP編 - ccls バージョン）
+
+ここから先はこの記事の古いバージョンです。
+ccls の設定は面倒くさいのでやめたほうが良さそうです。
 
 ## 環境
 
