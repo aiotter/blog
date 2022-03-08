@@ -70,7 +70,7 @@ site.use(asciidoc());
 import tailwindcss from "plugins/tailwindcss.ts";
 site.use(tailwindcss());
 
-import sass from "https://raw.githubusercontent.com/lumeland/experimental-plugins/main/sass/sass.ts";
+import sass from "https://raw.githubusercontent.com/lumeland/experimental-plugins/a10a8bbf353674ab30c611185553a82ed6ada71e/sass/sass.ts";
 site.use(sass());
 
 // Auto generate CSS files
