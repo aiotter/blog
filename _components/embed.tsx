@@ -7,7 +7,7 @@ export function Embed({ ogp }: { ogp: ReturnType<typeof parse> }) {
   return (
     <section
       name="embed"
-      class="flex flex-wrap md:flex-nowrap gap-2 outline outline-4 hover:outline-teal-600 outline-slate-300 rounded-xl my-5 p-4 mx-auto max-w-[90%]"
+      class="flex flex-wrap md:flex-nowrap gap-2 border-4 hover:border-teal-600 border-slate-300 rounded-xl my-5 p-4 mx-auto max-w-[90%]"
     >
       <img
         class="basis-3/5 grow max-h-44 object-contain !bg-transparent !m-auto"
