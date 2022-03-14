@@ -3,7 +3,7 @@ import {
   loadImage,
 } from "https://deno.land/x/canvas@v1.4.1/mod.ts";
 import { namespace } from "https://deno.land/x/cache@0.2.13/mod.ts";
-import { TinySegmenter } from "deps/tiny-segmenter.js";
+import { TinySegmenter } from "libs/tiny-segmenter.js";
 import dayjs from "dayjs";
 import { Data } from "lume/core.ts";
 import site from "site";

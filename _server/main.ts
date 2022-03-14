@@ -1,22 +1,15 @@
-import { Application, Router } from "https://deno.land/x/oak@v10.2.0/mod.ts";
+import { oak } from "./deps.ts";
+import { staticFiles } from "./static.ts";
+import * as embed from "./api/embed.ts";
 
-const app = new Application();
+const app = new oak.Application();
+const router = new oak.Router();
 
-// Serve static files
-app.use(async (ctx, next) => {
-  try {
-    await ctx.send({
-      root: `${Deno.cwd()}/_site`,
-      index: "index.html",
-    });
-  } catch {
-    if (ctx.request.method !== "GET") await next();
-    ctx.response.status = 404;
-    ctx.response.body = await Deno.readTextFile(`${Deno.cwd()}/_site/404/index.html`);
-  }
-});
+// Handle API endpoints
+router.get("/api/embed", embed.app);
 
-const router = new Router();
+app.use(router.routes());
+app.use(staticFiles);
 app.use(router.allowedMethods());
 
 await app.listen({ port: 8000 });

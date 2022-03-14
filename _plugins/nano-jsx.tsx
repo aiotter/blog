@@ -68,7 +68,7 @@ export async function clientSideScriptLoader(
   let compileResult;
   try {
     compileResult = await Deno.emit(path, {
-      bundle: "module",
+      bundle: "classic",
       check: false,
       compilerOptions: {
         jsx: "react-jsx",
@@ -84,7 +84,7 @@ export async function clientSideScriptLoader(
     // We may have jsx pragma;
     // retry without jsx-related compiler options
     compileResult = await Deno.emit(path, {
-      bundle: "module",
+      bundle: "classic",
       check: false,
       compilerOptions: {
         target: "es2015",

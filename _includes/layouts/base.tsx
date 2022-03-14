@@ -36,6 +36,8 @@ const template: Nano.FC<{ children: Nano.Component } & Data> = (
         <meta name="twitter:image" content={image(data)} />
         <meta name="twitter:creator" content="aiotter_tech" />
 
+        <script src="/scripts/embed.js" />
+
         <link
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
           rel="stylesheet"
