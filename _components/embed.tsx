@@ -18,10 +18,10 @@ export function Embed({ ogp }: { ogp: ReturnType<typeof parse> }) {
         height={ogp.images[0]?.height}
       />
       <div class="basis-2/5 grow p-2 m-auto min-w-0">
-        <h1 class="inline-block !text-clip !text-lg !font-bold line-clamp-2 !my-2 !border-b-2">
+        <h1 class="line-clamp-2 !text-lg !font-bold !my-2 !border-b-2">
           {ogp.title}
         </h1>
-        <div class="inline-block line-clamp-3 md:line-clamp-5 text-sm">
+        <div class="line-clamp-3 md:line-clamp-5 text-sm">
           {ogp.description}
         </div>
       </div>

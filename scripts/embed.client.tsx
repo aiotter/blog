@@ -20,6 +20,9 @@ window.addEventListener("load", () => {
       );
       url.searchParams.set("url", a!.href);
       const ogp = await fetch(url.href).then((r) => r.json());
-      hydrate(<Embed ogp={ogp as Parameters<typeof Embed>[0]["ogp"]} />, a!);
+      if (ogp) {
+        hydrate(<Embed ogp={ogp as Parameters<typeof Embed>[0]["ogp"]} />, a!);
+        a!.classList.add("no-underline");
+      }
     });
 });
