@@ -37,9 +37,6 @@ site.use(codeHighlight());
 import resolveUrls from "lume/plugins/resolve_urls.ts";
 site.use(resolveUrls());
 
-import slugifyUrls from "lume/plugins/slugify_urls.ts";
-site.use(slugifyUrls());
-
 import svgo from "lume/plugins/svgo.ts";
 site.use(svgo());
 
